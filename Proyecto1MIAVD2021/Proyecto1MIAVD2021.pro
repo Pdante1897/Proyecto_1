@@ -10,7 +10,9 @@ CONFIG -= app_bundle
 SOURCES += \
         Node.cpp \
         main.cpp \
-        mkdisk.cpp
+        mkdisk.cpp \
+        parser.cpp \
+        scanner.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -20,4 +22,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     Node.h \
     main.h \
-    mkdisk.h
+    mkdisk.h \
+    parser.h \
+    scanner.h

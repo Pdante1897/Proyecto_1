@@ -14,5 +14,25 @@
   "C_Cpp_Runner.cppStandard": "",
   "C_Cpp_Runner.excludeSearch": [],
   "C_Cpp_Runner.enableWarnings": true,
-  "C_Cpp_Runner.warningsAsError": false
+  "C_Cpp_Runner.warningsAsError": false,
+  "workbench.colorCustomizations": {
+    "activityBar.activeBackground": "#930000",
+    "activityBar.activeBorder": "#000000",
+    "activityBar.background": "#930000",
+    "activityBar.foreground": "#e7e7e7",
+    "activityBar.inactiveForeground": "#e7e7e799",
+    "activityBarBadge.background": "#000000",
+    "activityBarBadge.foreground": "#e7e7e7",
+    "sash.hoverBorder": "#930000",
+    "statusBar.background": "#600000",
+    "statusBar.foreground": "#e7e7e7",
+    "statusBarItem.hoverBackground": "#930000",
+    "statusBarItem.remoteBackground": "#600000",
+    "statusBarItem.remoteForeground": "#e7e7e7",
+    "titleBar.activeBackground": "#600000",
+    "titleBar.activeForeground": "#e7e7e7",
+    "titleBar.inactiveBackground": "#60000099",
+    "titleBar.inactiveForeground": "#e7e7e799"
+  },
+  "peacock.color": "#600000"
 }

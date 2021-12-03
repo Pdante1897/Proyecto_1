@@ -52,8 +52,16 @@ OBJECTS_DIR   = ./
 
 ####### Files
 
-SOURCES       = ../Proyecto1MIAVD2021/main.cpp 
-OBJECTS       = main.o
+SOURCES       = ../Proyecto1MIAVD2021/Node.cpp \
+		../Proyecto1MIAVD2021/main.cpp \
+		../Proyecto1MIAVD2021/mkdisk.cpp \
+		../Proyecto1MIAVD2021/parser.cpp \
+		../Proyecto1MIAVD2021/scanner.cpp 
+OBJECTS       = Node.o \
+		main.o \
+		mkdisk.o \
+		parser.o \
+		scanner.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/linux.conf \
@@ -128,7 +136,15 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exceptions.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
-		../Proyecto1MIAVD2021/Proyecto1MIAVD2021.pro ../Proyecto1MIAVD2021/main.h ../Proyecto1MIAVD2021/main.cpp
+		../Proyecto1MIAVD2021/Proyecto1MIAVD2021.pro ../Proyecto1MIAVD2021/Node.h \
+		../Proyecto1MIAVD2021/main.h \
+		../Proyecto1MIAVD2021/mkdisk.h \
+		../Proyecto1MIAVD2021/parser.h \
+		../Proyecto1MIAVD2021/scanner.h ../Proyecto1MIAVD2021/Node.cpp \
+		../Proyecto1MIAVD2021/main.cpp \
+		../Proyecto1MIAVD2021/mkdisk.cpp \
+		../Proyecto1MIAVD2021/parser.cpp \
+		../Proyecto1MIAVD2021/scanner.cpp
 QMAKE_TARGET  = Proyecto1MIAVD2021
 DESTDIR       = 
 TARGET        = Proyecto1MIAVD2021
@@ -306,8 +322,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../Proyecto1MIAVD2021/main.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../Proyecto1MIAVD2021/main.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../Proyecto1MIAVD2021/Node.h ../Proyecto1MIAVD2021/main.h ../Proyecto1MIAVD2021/mkdisk.h ../Proyecto1MIAVD2021/parser.h ../Proyecto1MIAVD2021/scanner.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../Proyecto1MIAVD2021/Node.cpp ../Proyecto1MIAVD2021/main.cpp ../Proyecto1MIAVD2021/mkdisk.cpp ../Proyecto1MIAVD2021/parser.cpp ../Proyecto1MIAVD2021/scanner.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -355,8 +371,24 @@ compiler_clean: compiler_moc_predefs_clean
 
 ####### Compile
 
-main.o: ../Proyecto1MIAVD2021/main.cpp ../Proyecto1MIAVD2021/main.h
+Node.o: ../Proyecto1MIAVD2021/Node.cpp ../Proyecto1MIAVD2021/Node.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Node.o ../Proyecto1MIAVD2021/Node.cpp
+
+main.o: ../Proyecto1MIAVD2021/main.cpp ../Proyecto1MIAVD2021/main.h \
+		../Proyecto1MIAVD2021/Node.h \
+		../Proyecto1MIAVD2021/parser.h \
+		../Proyecto1MIAVD2021/scanner.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../Proyecto1MIAVD2021/main.cpp
+
+mkdisk.o: ../Proyecto1MIAVD2021/mkdisk.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mkdisk.o ../Proyecto1MIAVD2021/mkdisk.cpp
+
+parser.o: ../Proyecto1MIAVD2021/parser.cpp ../Proyecto1MIAVD2021/scanner.h \
+		../Proyecto1MIAVD2021/Node.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o parser.o ../Proyecto1MIAVD2021/parser.cpp
+
+scanner.o: ../Proyecto1MIAVD2021/scanner.cpp ../Proyecto1MIAVD2021/parser.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o scanner.o ../Proyecto1MIAVD2021/scanner.cpp
 
 ####### Install
 

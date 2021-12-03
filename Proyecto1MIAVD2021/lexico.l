@@ -1,12 +1,14 @@
 %{
     #include <iostream>
     #include "parser.h"
+    #include <QList>
     char coment[400];
     int yylex();
     void yyerror(const char *s);
     int linea = 0;
     int columna = 1;
     int anterior = 0;
+    QList<Node> *listNodos;
 %}
 
 %option case-insensitive

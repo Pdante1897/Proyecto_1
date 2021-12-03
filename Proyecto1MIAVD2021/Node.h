@@ -7,7 +7,9 @@
 class Node
 {
 public:
-    Node();
+    Node(QString tipo, QString valor);
+    QString tipo;
+    QString valor;
 };
 
 #endif // NODE_H

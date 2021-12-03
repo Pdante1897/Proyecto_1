@@ -4,10 +4,27 @@
 #include <stdio.h>
 #include <string.h>
 #include <QTextStream>
+#include <QList>
 #include "main.h"
+#include "Node.h"
+
+#include "parser.h"
+#include "scanner.h"
+
 using namespace std;
 
+extern int yyparse();
+extern int linea;
+extern int columna;
+extern int yylineno;
+extern QList<Node> listNodos; //lista de nodos
 
+//para distinguir el comando ingresado
+enum choice{
+    mkd=1
+};
+
+//Metodo main
 int main()
 {
     char encabezado[] = "------------------------------SISTEMA DE ARCHIVOS-----------------------------\n"
@@ -22,11 +39,12 @@ int main()
         if (comExit(lcomando)){
             break;
         }
+        leerLComando(lcomando);
     }
 
     return 0;
 }
-
+//metodo retorna true si se ingreso exit
 bool comExit(char exit[399]){
     if(exit[0]=='e' && exit[1]=='x' && exit[2]=='i' && exit[3]=='t' ){
         return true;
@@ -34,3 +52,16 @@ bool comExit(char exit[399]){
     return false;
 
 }
+void leerLComando(char lcomando[399]){
+    if(lcomando[0] != '#'){
+        YY_BUFFER_STATE buffer;
+        buffer = yy_scan_string(lcomando);
+        if(yyparse() == 0){
+            if(!listNodos.empty()){
+            }
+        }else
+            printf("Error: Comando no reconocido");
+    }
+}
+
+
