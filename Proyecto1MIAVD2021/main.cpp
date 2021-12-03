@@ -4,16 +4,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <QTextStream>
-
+#include "main.h"
 using namespace std;
 
-bool comExit(char exit[399]){
-    if(exit[0]=='e' && exit[1]=='x' && exit[2]=='i' && exit[3]=='t' ){
-        return true;
-    }
-    return false;
-
-}
 
 int main()
 {
@@ -32,4 +25,12 @@ int main()
     }
 
     return 0;
+}
+
+bool comExit(char exit[399]){
+    if(exit[0]=='e' && exit[1]=='x' && exit[2]=='i' && exit[3]=='t' ){
+        return true;
+    }
+    return false;
+
 }
