@@ -51,9 +51,10 @@ bool makeDisk(QString direccion, int tam , MBR mbr){
     return true;
 }
 //para validar si los parametros son correctos y no se repiten
-void validarMkDisk(){
+bool validarMkDisk(){
     bool bandera;
     bool banderaFit;
     bool banderaUnit;
     bool banderaSize;
+    return false;
 }

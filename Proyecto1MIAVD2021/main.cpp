@@ -21,7 +21,7 @@ extern QList<Node> listNodos; //lista de nodos
 
 //para distinguir el comando ingresado
 enum choice{
-    mkd=1
+    MKD=1
 };
 
 //Metodo main
@@ -32,7 +32,8 @@ int main()
     verificarRuta(cadena);
     makeDisk(cadena,10,mbr);
     char encabezado[] = "------------------------------SISTEMA DE ARCHIVOS-----------------------------\n"
-             "By: Bryan Gerardo Paez Morales_______________________________________201700945\n";
+             "By: Bryan Gerardo Paez Morales_______________________________________201700945\n"
+             "Ingrese un comando: \n";
     printf("%s",encabezado);
     char lcomando[399];
     string exit = "exit";
@@ -56,6 +57,7 @@ bool comExit(char exit[399]){
     return false;
 
 }
+//metodo para leer comando ingresado y enviarlo a los analizadores
 void leerLComando(char lcomando[399]){
     if(lcomando[0] != '#'){
         YY_BUFFER_STATE buffer;
@@ -65,6 +67,21 @@ void leerLComando(char lcomando[399]){
             }
         }else
             printf("Error: Comando no valido \n \n");
+    }
+}
+
+//manda a llamar los metodos de cada comando utilizando la clase enumerada
+void ejecutarComando(QList<Node> Lista){
+    Node nodo = Lista.at(0);
+    switch (nodo.tipo){
+    case MKD:{
+        if(validarMkDisk()){
+            printf("Comando reconocido correctamente. \n \n");
+        }else{
+            printf("Error: Faltan parametros o parametros repetidos, revisar linea de comando. \n \n");
+
+        }
+    }
     }
 }
 

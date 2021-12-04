@@ -3,6 +3,7 @@
 #include "estructuras.h"
 #include <QString>
 bool makeDisk(QString, int, MBR);
-void validarMkDisk();
+bool validarMkDisk();
 void verificarRuta(QString);
+
 #endif // MKDISK_H
