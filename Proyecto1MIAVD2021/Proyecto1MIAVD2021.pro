@@ -21,6 +21,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     Node.h \
+    estructuras.h \
     main.h \
     mkdisk.h \
     parser.h \

@@ -7,10 +7,10 @@
 #include <QList>
 #include "main.h"
 #include "Node.h"
-
+#include "mkdisk.h"
 #include "parser.h"
 #include "scanner.h"
-
+#include "estructuras.h"
 using namespace std;
 
 extern int yyparse();
@@ -27,6 +27,10 @@ enum choice{
 //Metodo main
 int main()
 {
+    MBR mbr;
+    QString cadena = "/home/bryan/carpeta/disko.disk";
+    verificarRuta(cadena);
+    makeDisk(cadena,10,mbr);
     char encabezado[] = "------------------------------SISTEMA DE ARCHIVOS-----------------------------\n"
              "By: Bryan Gerardo Paez Morales_______________________________________201700945\n";
     printf("%s",encabezado);
@@ -60,7 +64,7 @@ void leerLComando(char lcomando[399]){
             if(!listNodos.empty()){
             }
         }else
-            printf("Error: Comando no reconocido");
+            printf("Error: Comando no valido \n \n");
     }
 }
 
