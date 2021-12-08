@@ -75,7 +75,7 @@
     extern int yylineno; //linea actual donde se encuentra el parser (analisis lexico) lo maneja BISON
     extern int columna; //columna actual donde se encuentra el parser (analisis lexico) lo maneja BISON
     extern char *yytext; //lexema actual donde esta el parser (analisis lexico) lo maneja BISON
-    extern QList<Node> *listNodos; // lista de Nodos que contienen parametros
+    extern Node *listNodos; // Nodo raiz de lista de Nodos que contienen parametros
 
     int yyerror(const char* mens){
         std::cout<<mens<<std::endl;
@@ -555,8 +555,8 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    77,    77,    79,    80,    84,    85,    87,    88,    89,
-      90,    91,    92,    93,    94,    95,    96
+       0,    77,    77,    79,    80,    84,    86,    89,    90,    92,
+      93,    94,    95,    96,    97,    98,   103
 };
 #endif
 
@@ -1361,84 +1361,107 @@ yyreduce:
     {
   case 2:
 #line 77 "parser.y"
-                 {listNodos= new QList<Node>();}
+                 {listNodos= new Node("",""); listNodos=(yyval.Node);}
 #line 1366 "parser.cpp"
     break;
 
   case 3:
 #line 79 "parser.y"
-                       {(yyval.Node)=new Node("mkdisk",""); }
+                       {(yyval.Node)=new Node("mkdisk",""); (yyval.Node)->agregar(*(yyvsp[0].Node)); }
 #line 1372 "parser.cpp"
     break;
 
   case 4:
 #line 80 "parser.y"
-                   {(yyval.Node)=new Node("rmdisk",""); }
+                  { (yyval.Node) = (yyvsp[0].Node); }
 #line 1378 "parser.cpp"
     break;
 
+  case 5:
+#line 84 "parser.y"
+                            {(yyval.Node) = (yyvsp[-1].Node); 
+                            (yyval.Node)->agregar(*(yyvsp[0].Node));}
+#line 1385 "parser.cpp"
+    break;
+
+  case 6:
+#line 86 "parser.y"
+                      {(yyval.Node) = new Node("parametro",""); 
+                        (yyval.Node)->agregar(*(yyvsp[0].Node)); }
+#line 1392 "parser.cpp"
+    break;
+
   case 7:
-#line 87 "parser.y"
-                              {(yyval.Node)=new Node("size",(yyvsp[0].text)); }
-#line 1384 "parser.cpp"
+#line 89 "parser.y"
+                             { (yyval.Node)= new Node("size",(yyvsp[0].text)); }
+#line 1398 "parser.cpp"
     break;
 
   case 8:
-#line 88 "parser.y"
-                              {(yyval.Node)=new Node("fit",""); }
-#line 1390 "parser.cpp"
+#line 90 "parser.y"
+                              {(yyval.Node) = new Node ("fit", ""); 
+                                (yyval.Node)->agregar(*(yyvsp[0].Node));}
+#line 1405 "parser.cpp"
     break;
 
   case 9:
-#line 89 "parser.y"
-                                 {(yyval.Node)=new Node("unit",(yyvsp[0].text)); }
-#line 1396 "parser.cpp"
+#line 92 "parser.y"
+                                 { (yyval.Node) = new Node("unit",(yyvsp[0].text));}
+#line 1411 "parser.cpp"
     break;
 
   case 10:
-#line 90 "parser.y"
-                               {(yyval.Node)=new Node("path",(yyvsp[0].text)); }
-#line 1402 "parser.cpp"
+#line 93 "parser.y"
+                               {(yyval.Node) = new Node("path",(yyvsp[0].text));}
+#line 1417 "parser.cpp"
     break;
 
   case 11:
-#line 91 "parser.y"
-                             {(yyval.Node)=new Node("path",(yyvsp[0].text)); }
-#line 1408 "parser.cpp"
+#line 94 "parser.y"
+                             {(yyval.Node) = new Node("path",(yyvsp[0].text));}
+#line 1423 "parser.cpp"
     break;
 
   case 12:
-#line 92 "parser.y"
-           {(yyval.Node)=new Node("fit","bf"); }
-#line 1414 "parser.cpp"
+#line 95 "parser.y"
+           { (yyval.Node) = new Node("AJUSTE", "bf"); }
+#line 1429 "parser.cpp"
     break;
 
   case 13:
-#line 93 "parser.y"
-             {(yyval.Node)=new Node("fit","ff"); }
-#line 1420 "parser.cpp"
+#line 96 "parser.y"
+             { (yyval.Node) = new Node("AJUSTE", "ff"); }
+#line 1435 "parser.cpp"
     break;
 
   case 14:
-#line 94 "parser.y"
-             {(yyval.Node)=new Node("fit","wf"); }
-#line 1426 "parser.cpp"
+#line 97 "parser.y"
+             { (yyval.Node) = new Node("AJUSTE", "wf"); }
+#line 1441 "parser.cpp"
     break;
 
   case 15:
-#line 95 "parser.y"
-                               {(yyval.Node)=new Node("path",(yyvsp[0].text)); }
-#line 1432 "parser.cpp"
+#line 98 "parser.y"
+                               {
+                                (yyval.Node) = new Node("RMDISK","");
+                                Node *nodo = new Node("path",(yyvsp[0].text));
+                                (yyval.Node)->agregar(*nodo);
+                               }
+#line 1451 "parser.cpp"
     break;
 
   case 16:
-#line 96 "parser.y"
-                                    {(yyval.Node)=new Node("path",(yyvsp[0].text)); }
-#line 1438 "parser.cpp"
+#line 103 "parser.y"
+                                    {
+                                      (yyval.Node) = new Node("RMDISK","");
+                                      Node *ruta = new Node("path",(yyvsp[0].text));
+                                      (yyval.Node)->agregar(*ruta);
+                                    }
+#line 1461 "parser.cpp"
     break;
 
 
-#line 1442 "parser.cpp"
+#line 1465 "parser.cpp"
 
       default: break;
     }

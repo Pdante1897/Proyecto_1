@@ -6,7 +6,7 @@
     extern int yylineno; //linea actual donde se encuentra el parser (analisis lexico) lo maneja BISON
     extern int columna; //columna actual donde se encuentra el parser (analisis lexico) lo maneja BISON
     extern char *yytext; //lexema actual donde esta el parser (analisis lexico) lo maneja BISON
-    extern QList<Node> *listNodos; // lista de Nodos que contienen parametros
+    extern Node *listNodos; // Nodo raiz de lista de Nodos que contienen parametros
 
     int yyerror(const char* mens){
         std::cout<<mens<<std::endl;
@@ -74,23 +74,34 @@
 
 %%
 
-INICIO:  COMANDO {listNodos= new QList<Node>();};
+INICIO:  COMANDO {listNodos= new Node("",""); listNodos=$$;};
 
-COMANDO: mkdisk MKDISK {$$=new Node("mkdisk",""); }
-        | RMDISK   {$$=new Node("rmdisk",""); };
+COMANDO: mkdisk MKDISK {$$=new Node("mkdisk",""); $$->agregar(*$2); }
+        | RMDISK  { $$ = $1; }
 
 
 
-MKDISK: MKDISK PARAMETROMKD 
-        |PARAMETROMKD ;
+MKDISK: MKDISK PARAMETROMKD {$$ = $1; 
+                            $$->agregar(*$2);}
+        |PARAMETROMKD {$$ = new Node("parametro",""); 
+                        $$->agregar(*$1); };
 
-PARAMETROMKD: size igual num  {$$=new Node("size",$3); }
-            |fit igual AJUSTE {$$=new Node("fit",""); };
-            |unit igual caracter {$$=new Node("unit",$3); }
-            |path igual cadena {$$=new Node("path",$3); }
-            |path igual ruta {$$=new Node("path",$3); };
-AJUSTE: bf {$$=new Node("fit","bf"); }
-        | ff {$$=new Node("fit","ff"); }
-        | wf {$$=new Node("fit","wf"); };
-RMDISK: rmdisk path igual ruta {$$=new Node("path",$4); }
-         | rmdisk path igual cadena {$$=new Node("path",$4); };
+PARAMETROMKD: size igual num { $$= new Node("size",$3); }
+            |fit igual AJUSTE {$$ = new Node ("fit", ""); 
+                                $$->agregar(*$3);}
+            |unit igual caracter { $$ = new Node("unit",$3);}
+            |path igual cadena {$$ = new Node("path",$3);}
+            |path igual ruta {$$ = new Node("path",$3);};
+AJUSTE: bf { $$ = new Node("AJUSTE", "bf"); }
+        | ff { $$ = new Node("AJUSTE", "ff"); }
+        | wf { $$ = new Node("AJUSTE", "wf"); };
+RMDISK: rmdisk path igual ruta {
+                                $$ = new Node("RMDISK","");
+                                Node *nodo = new Node("path",$4);
+                                $$->agregar(*nodo);
+                               }
+         | rmdisk path igual cadena {
+                                      $$ = new Node("RMDISK","");
+                                      Node *ruta = new Node("path",$4);
+                                      $$->agregar(*ruta);
+                                    };

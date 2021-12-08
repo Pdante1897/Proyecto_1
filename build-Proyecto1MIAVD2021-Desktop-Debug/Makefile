@@ -53,11 +53,13 @@ OBJECTS_DIR   = ./
 ####### Files
 
 SOURCES       = ../Proyecto1MIAVD2021/Node.cpp \
+		../Proyecto1MIAVD2021/disk.cpp \
 		../Proyecto1MIAVD2021/main.cpp \
 		../Proyecto1MIAVD2021/mkdisk.cpp \
 		../Proyecto1MIAVD2021/parser.cpp \
 		../Proyecto1MIAVD2021/scanner.cpp 
 OBJECTS       = Node.o \
+		disk.o \
 		main.o \
 		mkdisk.o \
 		parser.o \
@@ -137,11 +139,13 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
 		../Proyecto1MIAVD2021/Proyecto1MIAVD2021.pro ../Proyecto1MIAVD2021/Node.h \
+		../Proyecto1MIAVD2021/disk.h \
 		../Proyecto1MIAVD2021/estructuras.h \
 		../Proyecto1MIAVD2021/main.h \
 		../Proyecto1MIAVD2021/mkdisk.h \
 		../Proyecto1MIAVD2021/parser.h \
 		../Proyecto1MIAVD2021/scanner.h ../Proyecto1MIAVD2021/Node.cpp \
+		../Proyecto1MIAVD2021/disk.cpp \
 		../Proyecto1MIAVD2021/main.cpp \
 		../Proyecto1MIAVD2021/mkdisk.cpp \
 		../Proyecto1MIAVD2021/parser.cpp \
@@ -323,8 +327,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../Proyecto1MIAVD2021/Node.h ../Proyecto1MIAVD2021/estructuras.h ../Proyecto1MIAVD2021/main.h ../Proyecto1MIAVD2021/mkdisk.h ../Proyecto1MIAVD2021/parser.h ../Proyecto1MIAVD2021/scanner.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../Proyecto1MIAVD2021/Node.cpp ../Proyecto1MIAVD2021/main.cpp ../Proyecto1MIAVD2021/mkdisk.cpp ../Proyecto1MIAVD2021/parser.cpp ../Proyecto1MIAVD2021/scanner.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../Proyecto1MIAVD2021/Node.h ../Proyecto1MIAVD2021/disk.h ../Proyecto1MIAVD2021/estructuras.h ../Proyecto1MIAVD2021/main.h ../Proyecto1MIAVD2021/mkdisk.h ../Proyecto1MIAVD2021/parser.h ../Proyecto1MIAVD2021/scanner.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../Proyecto1MIAVD2021/Node.cpp ../Proyecto1MIAVD2021/disk.cpp ../Proyecto1MIAVD2021/main.cpp ../Proyecto1MIAVD2021/mkdisk.cpp ../Proyecto1MIAVD2021/parser.cpp ../Proyecto1MIAVD2021/scanner.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -375,6 +379,9 @@ compiler_clean: compiler_moc_predefs_clean
 Node.o: ../Proyecto1MIAVD2021/Node.cpp ../Proyecto1MIAVD2021/Node.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Node.o ../Proyecto1MIAVD2021/Node.cpp
 
+disk.o: ../Proyecto1MIAVD2021/disk.cpp ../Proyecto1MIAVD2021/disk.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o disk.o ../Proyecto1MIAVD2021/disk.cpp
+
 main.o: ../Proyecto1MIAVD2021/main.cpp ../Proyecto1MIAVD2021/main.h \
 		../Proyecto1MIAVD2021/Node.h \
 		../Proyecto1MIAVD2021/mkdisk.h \
@@ -383,7 +390,10 @@ main.o: ../Proyecto1MIAVD2021/main.cpp ../Proyecto1MIAVD2021/main.h \
 		../Proyecto1MIAVD2021/scanner.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../Proyecto1MIAVD2021/main.cpp
 
-mkdisk.o: ../Proyecto1MIAVD2021/mkdisk.cpp ../Proyecto1MIAVD2021/estructuras.h
+mkdisk.o: ../Proyecto1MIAVD2021/mkdisk.cpp ../Proyecto1MIAVD2021/estructuras.h \
+		../Proyecto1MIAVD2021/Node.h \
+		../Proyecto1MIAVD2021/main.h \
+		../Proyecto1MIAVD2021/disk.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mkdisk.o ../Proyecto1MIAVD2021/mkdisk.cpp
 
 parser.o: ../Proyecto1MIAVD2021/parser.cpp ../Proyecto1MIAVD2021/scanner.h \

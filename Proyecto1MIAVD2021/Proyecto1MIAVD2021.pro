@@ -9,6 +9,7 @@ CONFIG -= app_bundle
 
 SOURCES += \
         Node.cpp \
+        disk.cpp \
         main.cpp \
         mkdisk.cpp \
         parser.cpp \
@@ -21,6 +22,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     Node.h \
+    disk.h \
     estructuras.h \
     main.h \
     mkdisk.h \

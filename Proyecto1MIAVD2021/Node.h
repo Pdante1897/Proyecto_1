@@ -7,10 +7,14 @@
 class Node
 {
 public:
-    Node(QString nombre, int tipo, QString valor);
+    Node(QString nombre, QString valor);
     QString nombre;
     int tipo;
     QString valor;
+    void asignarTipo();
+    QList<Node> hijos;
+    void agregar(Node nodo);
 };
+
 
 #endif // NODE_H

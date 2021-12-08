@@ -17,20 +17,23 @@ extern int yyparse();
 extern int linea;
 extern int columna;
 extern int yylineno;
-extern QList<Node> listNodos; //lista de nodos
+extern Node *listNodos; //lista de nodos
 
 //para distinguir el comando ingresado
 enum choice{
-    MKD=1
+    MKD=1,
+    SIZE=2,
+    FIT=3,
+    UNIT=4,
+    PATH=5
 };
-
 //Metodo main
 int main()
 {
-    MBR mbr;
-    QString cadena = "/home/bryan/carpeta/disko.disk";
-    verificarRuta(cadena);
-    makeDisk(cadena,10,mbr);
+    //MBR mbr;
+    //QString cadena = "/home/bryan/carpeta/disko.disk";
+    //verificarRuta(cadena);
+    //makeDisk(cadena,10,mbr);
     char encabezado[] = "------------------------------SISTEMA DE ARCHIVOS-----------------------------\n"
              "By: Bryan Gerardo Paez Morales_______________________________________201700945\n"
              "Ingrese un comando: \n";
@@ -46,7 +49,6 @@ int main()
         }
         leerLComando(lcomando);
     }
-
     return 0;
 }
 //metodo retorna true si se ingreso exit
@@ -63,7 +65,8 @@ void leerLComando(char lcomando[399]){
         YY_BUFFER_STATE buffer;
         buffer = yy_scan_string(lcomando);
         if(yyparse() == 0){
-            if(!listNodos.empty()){
+            if(listNodos!=nullptr){
+                ejecutarComando(*listNodos);
             }
         }else
             printf("Error: Comando no valido \n \n");
@@ -71,14 +74,15 @@ void leerLComando(char lcomando[399]){
 }
 
 //manda a llamar los metodos de cada comando utilizando la clase enumerada
-void ejecutarComando(QList<Node> Lista){
-    Node nodo = Lista.at(0);
+void ejecutarComando(Node Lista){
+    Node nodo = Lista;
+    nodo.asignarTipo();
     switch (nodo.tipo){
     case MKD:{
-        if(validarMkDisk()){
+        Node nodito = listNodos->hijos.at(0);
+        if(validarMkDisk(&nodito)){
             printf("Comando reconocido correctamente. \n \n");
         }else{
-            printf("Error: Faltan parametros o parametros repetidos, revisar linea de comando. \n \n");
 
         }
     }
