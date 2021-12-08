@@ -6,5 +6,5 @@
 bool makeDisk(QString, int, MBR);
 bool validarMkDisk(Node *Raiz);
 void verificarRuta(QString);
-
+void ejecutarRMD(Node *Raiz);
 #endif // MKDISK_H

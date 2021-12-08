@@ -1443,7 +1443,7 @@ yyreduce:
   case 15:
 #line 98 "parser.y"
                                {
-                                (yyval.Node) = new Node("RMDISK","");
+                                (yyval.Node) = new Node("rmdisk","");
                                 Node *nodo = new Node("path",(yyvsp[0].text));
                                 (yyval.Node)->agregar(*nodo);
                                }
@@ -1453,7 +1453,7 @@ yyreduce:
   case 16:
 #line 103 "parser.y"
                                     {
-                                      (yyval.Node) = new Node("RMDISK","");
+                                      (yyval.Node) = new Node("rmdisk","");
                                       Node *ruta = new Node("path",(yyvsp[0].text));
                                       (yyval.Node)->agregar(*ruta);
                                     }

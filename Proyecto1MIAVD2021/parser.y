@@ -96,12 +96,12 @@ AJUSTE: bf { $$ = new Node("AJUSTE", "bf"); }
         | ff { $$ = new Node("AJUSTE", "ff"); }
         | wf { $$ = new Node("AJUSTE", "wf"); };
 RMDISK: rmdisk path igual ruta {
-                                $$ = new Node("RMDISK","");
+                                $$ = new Node("rmdisk","");
                                 Node *nodo = new Node("path",$4);
                                 $$->agregar(*nodo);
                                }
          | rmdisk path igual cadena {
-                                      $$ = new Node("RMDISK","");
+                                      $$ = new Node("rmdisk","");
                                       Node *ruta = new Node("path",$4);
                                       $$->agregar(*ruta);
                                     };

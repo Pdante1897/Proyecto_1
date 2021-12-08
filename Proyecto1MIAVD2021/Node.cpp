@@ -12,6 +12,7 @@ void Node::asignarTipo(){
     if (this->nombre=="fit"){this->tipo=3;return;}
     if (this->nombre=="unit"){this->tipo=4;return;}
     if (this->nombre=="path"){this->tipo=5;return;}
+    if (this->nombre=="rmdisk"){this->tipo=6;return;}
 
 
 }

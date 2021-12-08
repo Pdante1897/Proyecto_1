@@ -25,7 +25,8 @@ enum choice{
     SIZE=2,
     FIT=3,
     UNIT=4,
-    PATH=5
+    PATH=5,
+    RMDK=6
 };
 //Metodo main
 int main()
@@ -79,12 +80,17 @@ void ejecutarComando(Node Lista){
     nodo.asignarTipo();
     switch (nodo.tipo){
     case MKD:{
-        Node nodito = listNodos->hijos.at(0);
+        Node nodito = nodo.hijos.at(0);
         if(validarMkDisk(&nodito)){
             printf("Comando reconocido correctamente. \n \n");
-        }else{
-
         }
+        break;
+    }
+    case RMDK:{
+        Node nodito = nodo.hijos.at(0);
+        printf("aqui \n");
+        ejecutarRMD(&nodo);
+        break;
     }
     }
 }
