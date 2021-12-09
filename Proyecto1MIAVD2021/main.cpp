@@ -26,7 +26,8 @@ enum choice{
     FIT=3,
     UNIT=4,
     PATH=5,
-    RMDK=6
+    RMDK=6,
+    FDK=7,
 };
 //Metodo main
 int main()
@@ -88,8 +89,10 @@ void ejecutarComando(Node Lista){
     }
     case RMDK:{
         Node nodito = nodo.hijos.at(0);
-        printf("aqui \n");
         ejecutarRMD(&nodo);
+        break;
+    }
+    case FDK:{
         break;
     }
     }

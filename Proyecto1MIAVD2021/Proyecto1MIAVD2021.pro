@@ -10,6 +10,7 @@ CONFIG -= app_bundle
 SOURCES += \
         Node.cpp \
         disk.cpp \
+        fdisk.cpp \
         main.cpp \
         mkdisk.cpp \
         parser.cpp \
@@ -24,6 +25,7 @@ HEADERS += \
     Node.h \
     disk.h \
     estructuras.h \
+    fdisk.h \
     main.h \
     mkdisk.h \
     parser.h \

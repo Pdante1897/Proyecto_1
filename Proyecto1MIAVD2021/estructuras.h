@@ -18,4 +18,13 @@ typedef struct{
     char mbr_disk_fit;
     Partition mbr_partitions[4];
 }MBR;
+
+typedef struct{
+    char part_status;
+    char part_fit;
+    int part_start;
+    int part_size;
+    int part_next;
+    char part_name[16];
+}EBR;
 #endif // ESTRUCTURAS_H

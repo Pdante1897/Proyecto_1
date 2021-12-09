@@ -68,6 +68,8 @@
 %type <Node> PARAMETROMKD
 %type <Node> AJUSTE
 %type <Node> RMDISK
+%type <Node> FDISK
+%type <Node> PARAMETROFDK
 
 
 %start INICIO
@@ -78,12 +80,15 @@ INICIO:  COMANDO {listNodos= new Node("",""); listNodos=$$;};
 
 COMANDO: mkdisk MKDISK {$$=new Node("mkdisk",""); $$->agregar(*$2); }
         | RMDISK  { $$ = $1; }
+        | fdisk FDISK { $$ = new Node("FDISK","");
+                        $$->agregar(*$2);
+                        };
 
 
 
 MKDISK: MKDISK PARAMETROMKD {$$ = $1; 
                             $$->agregar(*$2);}
-        |PARAMETROMKD {$$ = new Node("parametro",""); 
+        |PARAMETROMKD {$$ = new Node("",""); 
                         $$->agregar(*$1); };
 
 PARAMETROMKD: size igual num { $$= new Node("size",$3); }
@@ -105,3 +110,19 @@ RMDISK: rmdisk path igual ruta {
                                       Node *ruta = new Node("path",$4);
                                       $$->agregar(*ruta);
                                     };
+FDISK: FDISK PARAMETROFDK {
+                            $$ = $1;
+                            $$->agregar(*$2);
+                          }
+        | PARAMETROFDK
+     {
+                        $$ = new Node("","");
+                        $$->agregar(*$1);
+                      };
+PARAMETROFDK: PARAMETROMKD { $$ = $1; }
+              | type igual caracter { $$ = new Node("type",$3); }
+              | del igual fast { $$ = new Node("del", "fast"); }
+              | del igual full { $$ = new Node("del", "full"); }
+              | name igual identificador { $$ = new Node("name", $3); }
+              | name igual cadena { $$ = new Node("name", $3); }
+              | add igual num { $$ = new Node("add", $3); };
