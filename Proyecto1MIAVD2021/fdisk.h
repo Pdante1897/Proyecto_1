@@ -4,5 +4,7 @@
 #include"Node.h"
 
 bool validarFDk(Node *Raiz);
-
+void crearPartPri(QString, QString, int, char, char);
+void addParticion();
+void delParticion();
 #endif // FDISK_H

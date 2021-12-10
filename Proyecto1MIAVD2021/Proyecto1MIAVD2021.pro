@@ -9,11 +9,13 @@ CONFIG -= app_bundle
 
 SOURCES += \
         Node.cpp \
+        clases.cpp \
         disk.cpp \
         fdisk.cpp \
         main.cpp \
         mkdisk.cpp \
         parser.cpp \
+        particion.cpp \
         scanner.cpp
 
 # Default rules for deployment.
@@ -23,10 +25,12 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     Node.h \
+    clases.h \
     disk.h \
     estructuras.h \
     fdisk.h \
     main.h \
     mkdisk.h \
     parser.h \
+    particion.h \
     scanner.h

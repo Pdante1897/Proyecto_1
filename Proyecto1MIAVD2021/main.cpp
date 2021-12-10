@@ -11,6 +11,8 @@
 #include "parser.h"
 #include "scanner.h"
 #include "estructuras.h"
+#include "fdisk.h"
+#include "clases.h"
 using namespace std;
 
 extern int yyparse();
@@ -18,7 +20,7 @@ extern int linea;
 extern int columna;
 extern int yylineno;
 extern Node *listNodos; //lista de nodos
-
+extern QList<NodoMount> partMontadas;
 //para distinguir el comando ingresado
 enum choice{
     MKD=1,
@@ -93,6 +95,8 @@ void ejecutarComando(Node Lista){
         break;
     }
     case FDK:{
+        Node nodito = nodo.hijos.at(0);
+        validarFDk(&nodito);
         break;
     }
     }
