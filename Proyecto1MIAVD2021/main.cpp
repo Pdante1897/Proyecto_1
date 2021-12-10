@@ -20,7 +20,8 @@ extern int linea;
 extern int columna;
 extern int yylineno;
 extern Node *listNodos; //lista de nodos
-extern QList<NodoMount> partMontadas;
+extern QList<ParticionMount> partMontadas;
+
 //para distinguir el comando ingresado
 enum choice{
     MKD=1,

@@ -456,6 +456,118 @@ void addParticion(QString path, QString name, int valorAdd, char valorUnit){
     }
 }
 void delParticion(){}
+void delParticion(QString direccion, QString nombre, QString typeDel){
+    string auxPath = direccion.toStdString();
+    string auxName = nombre.toStdString();
+    FILE *filep;
+    if((filep = fopen(auxPath.c_str(), "rb+"))){
+        MBR mbr;
+        fseek(filep,0,SEEK_SET);
+        fread(&mbr,sizeof (MBR),1,filep);
+        int ind = -1;
+        int indExt = -1;
+        bool flagExt = false;
+        string opc = "";
+        char buffer = '\0';
+        for(int i = 0; i < 4; i++){
+            if((strcmp(mbr.mbr_partitions[i].part_name, auxName.c_str())) == 0){
+                ind = i;
+                if(mbr.mbr_partitions[i].part_type == 'E')
+                    flagExt = true;
+                break;
+            }else if(mbr.mbr_partitions[i].part_type == 'E'){
+                indExt = i;
+            }
+        }
+        cout << "¿Esta seguro que desea eliminar la particion? Y/N : " ;
+        getline(cin, opc);
+        opc = "Y";
+        if(opc.compare("Y") == 0 || opc.compare("y") == 0){
+            if(ind != -1){//Si hay principales
+                if(!flagExt){//pri
+                    if(typeDel == "fast"){
+                        mbr.mbr_partitions[ind].part_status = '1';
+                        strcpy(mbr.mbr_partitions[ind].part_name,"");
+                        fseek(filep,0,SEEK_SET);
+                        fwrite(&mbr,sizeof(MBR),1,filep);
+
+                    }else{//full
+                        mbr.mbr_partitions[ind].part_status = '1';
+                        strcpy(mbr.mbr_partitions[ind].part_name,"");
+                        fseek(filep,0,SEEK_SET);
+                        fwrite(&mbr,sizeof(MBR),1,filep);
+                        fseek(filep,mbr.mbr_partitions[ind].part_start,SEEK_SET);
+                        fwrite(&buffer,1,mbr.mbr_partitions[ind].part_size,filep);
+                    }
+                    cout << "La particion primaria fue eliminada con exito" << endl;
+
+                }else{//ext
+                    if(typeDel == "fast"){
+                        mbr.mbr_partitions[ind].part_status = '1';
+                        strcpy(mbr.mbr_partitions[ind].part_name,"");
+                        fseek(filep,0,SEEK_SET);
+                        fwrite(&mbr,sizeof(MBR),1,filep);
+                    }else{//full
+                        mbr.mbr_partitions[ind].part_status = '1';
+                        strcpy(mbr.mbr_partitions[ind].part_name,"");
+                        fseek(filep,0,SEEK_SET);
+                        fwrite(&mbr,sizeof(MBR),1,filep);
+                        fseek(filep,mbr.mbr_partitions[ind].part_start,SEEK_SET);
+                        fwrite(&buffer,1,mbr.mbr_partitions[ind].part_size,filep);
+                    }
+                    cout << "La particion extendida fue eliminada con exito" << endl;
+
+                }
+            }else{//
+                if(indExt != -1){
+                    bool flag = false;//flag indica si existe
+                    EBR erb;
+                    fseek(filep,mbr.mbr_partitions[indExt].part_start, SEEK_SET);
+                    fread(&erb,sizeof(EBR),1,filep);
+                    if(erb.part_size!=0){
+                        fseek(filep, mbr.mbr_partitions[indExt].part_start,SEEK_SET);
+                        while((fread(&erb,sizeof(EBR),1,filep))!=0 && (ftell(filep) < (mbr.mbr_partitions[indExt].part_start + mbr.mbr_partitions[indExt].part_size))) {
+                            if(strcmp(erb.part_name,nombre.toStdString().c_str()) == 0 && erb.part_status != '1'){
+                                flag = true;
+                                break;
+                            }else if(erb.part_next == -1){//No se encontro
+                                break;
+                            }
+                        }
+                    }
+                    if(flag){
+                        if(typeDel == "fast"){
+                            erb.part_status = '1';
+                            strcpy(erb.part_name, "");
+                            fseek(filep, ftell(filep)-sizeof(EBR),SEEK_SET);
+                            fwrite(&erb,sizeof(EBR),1,filep);
+                        }else{//full
+                            erb.part_status = '1';
+                            strcpy(erb.part_name, "");
+                            fseek(filep, ftell(filep)-sizeof(EBR),SEEK_SET);
+                            fwrite(&erb,sizeof(EBR),1,filep);
+                            fwrite(&buffer,1,erb.part_size,filep);
+                        }
+                        cout << "La particion logica fue eliminada con exito" << endl;
+
+                    }else{
+                        cout << "ERROR: no se encuentra la particion que desea eliminar" << endl;
+                    }
+                }else{
+                    cout << "ERROR: no se encuentra la particion que desea eliminar" << endl;
+                }
+            }
+        }else if(opc.compare("N") || opc.compare("n") == 0){
+            cout << "Operacion Cancelada" << endl;;
+        }else{
+            cout << "Opcion ingresada incorrecta" << endl;
+        }
+
+        fclose(filep);
+    }else{
+        cout << "ERROR: el disco que contiene la particion especificada no existe" << endl;
+    }
+}
 
 void crearPartPri(QString direccion, QString name, int size, char fit){
     char auxF= fit;

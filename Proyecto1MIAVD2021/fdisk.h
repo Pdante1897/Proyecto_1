@@ -5,6 +5,6 @@
 
 bool validarFDk(Node *Raiz);
 void crearPartPri(QString, QString, int, char, char);
-void addParticion();
+void addParticion(QString path,QString name, int valorAdd, char valorUnit);
 void delParticion();
 #endif // FDISK_H
