@@ -13,6 +13,12 @@ void Node::asignarTipo(){
     if (this->nombre=="unit"){this->tipo=4;return;}
     if (this->nombre=="path"){this->tipo=5;return;}
     if (this->nombre=="rmdisk"){this->tipo=6;return;}
+    if (this->nombre=="fdisk"){this->tipo=7;return;}
+    if (this->nombre=="add"){this->tipo=8;return;}
+    if (this->nombre=="type"){this->tipo=9;return;}
+    if (this->nombre=="delete"){this->tipo=10;return;}
+    if (this->nombre=="name"){this->tipo=11;return;}
+
 
 
 }

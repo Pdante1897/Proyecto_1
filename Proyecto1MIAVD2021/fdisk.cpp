@@ -61,15 +61,16 @@ bool validarFDk(Node *Raiz){
         switch (nodito.tipo){
         case FIT:{
             if(banderaFit){
-                string fit=nodito.hijos.at(0).valor.toStdString();
-                if(fit == "b" or fit == "B"){
+                QString fit=nodito.hijos.at(0).valor.toStdString().c_str();
+                if(fit.at(0) == "b" or fit.at(0) == "B"){
                     fit = "B";
-                }else if(fit == "f" or fit == "F"){
+                }else if(fit.at(0) == "f" or fit.at(0) == "F"){
                     fit = "F";
-                }else if(fit == "w" or fit == "W"){
+                }else if(fit.at(0) == "w" or fit.at(0) == "W"){
                     fit = "W";
                 }
-                valorFit=fit[0];
+                valorFit=fit.toStdString().at(0);
+                printf("~~~>tipo de ajuste = %s\n",fit.toStdString().c_str());
                 printf("~~~>tipo de ajuste = %c\n",valorFit);
                 banderaFit=false;
             }else{
@@ -199,7 +200,10 @@ bool validarFDk(Node *Raiz){
     }
 
     }
-
+    if(!banderaAdd){printf("~~~>Add todo bien \n");}
+    if(!banderaDelete){printf("~~~>Delete todo bien \n");}
+    if(!banderaType){ printf("~~~>Type  todo bien \n");}
+    if(!banderaName){ printf("~~~>Name  todo bien \n");}
     if(!banderaSize){printf("~~~>Size todo bien \n");}
     if(!banderaPath){printf("~~~>Path todo bien \n");}
     if(!banderaFit){ printf("~~~>Fit  todo bien \n");}
@@ -224,15 +228,15 @@ bool validarFDk(Node *Raiz){
     if(primerSize){
         if (!banderaType){
             if(valorType=='P'){
-                crearPartPri(valorPath, valorName, valorSize, valorUnit, valorFit);
+                crearPartPri(valorPath, valorName, valorSize, valorFit);
             }else if(valorType=='E'){
-                //metodo particion extendida
+                crearPartExt(valorPath, valorName, valorSize, valorFit);
             }else if(valorType=='L'){
-                //metodo particion logica
+                crearLogica(valorPath, valorName, valorSize, valorFit);
             }
 
         }else{
-            crearPartPri(valorPath, valorName, valorSize, valorUnit, valorFit);
+            crearPartPri(valorPath, valorName, valorSize, valorFit);
         }
     }
     if(primerAdd){
@@ -240,25 +244,29 @@ bool validarFDk(Node *Raiz){
         for(int i=0; i<partMontadas.length(); i++){
             if(partMontadas.at(i).name==valorName and partMontadas.at(i).dir==valorPath){
             montado=true;
+            }
         }
-            if(montado){addParticion("","", 0, 0);}
-            else{printf("Error! La particion esta montada! Debe desmontarla antes de usar el comando -ADD \n");}
+        if(!montado){addParticion(valorPath,valorName, valorAdd, valorUnit);}
+        else{printf("Error! La particion esta montada! Debe desmontarla antes de usar el comando -ADD \n");}
 
-        }
+
+
+    }
     if(primerDelete){
         bool montado = false;
         for(int i=0; i<partMontadas.length(); i++){
             if(partMontadas.at(i).name==valorName and partMontadas.at(i).dir==valorPath){
             montado=true;
         }
-            if(montado){delParticion();}
-            else{printf("Error! La particion esta montada! Debe desmontarla antes de usar el comando -DELETE \n");}
 
+    } if(!montado){
+            delParticion(valorPath, valorName, valorDel);
         }
+        else{printf("Error! La particion esta montada! Debe desmontarla antes de usar el comando -DELETE \n");}
+
     }
     return !banderaFDisk;
 
-    }
 }
 
 void addParticion(QString path, QString name, int valorAdd, char valorUnit){
@@ -277,18 +285,20 @@ void addParticion(QString path, QString name, int valorAdd, char valorUnit){
     }
     FILE *archivo;
     if((archivo = fopen(path.toStdString().c_str(), "rb+"))){
-        bool banderaExtend = true;
+        bool banderaExtend = false;
         fseek(archivo,0,SEEK_SET);
         fread(&mbr,sizeof(MBR),1,archivo);
-        for(int i=0; i<4; i++){
-            if(mbr.mbr_partitions[i].part_type=='E'){
-                indiceExt=i;
-                banderaExtend=false;
-            }
-            else if(mbr.mbr_partitions[i].part_name==name){
-                indicePart=i;
+
+        for(int i = 0; i < 4; i++){
+            if((strcmp(mbr.mbr_partitions[i].part_name, name.toStdString().c_str()) == 0)){
+                indicePart = i;
                 part=true;
-                if(mbr.mbr_partitions[i].part_type=='E'){extendida=true; banderaExtend=false;}
+                if(mbr.mbr_partitions[i].part_type == 'E')
+                    extendida = true;
+                break;
+            }else if(mbr.mbr_partitions[i].part_type == 'E'){
+                indiceExt = i;
+                extendida=true;
             }
         }
         bool ultimaPart=false;
@@ -336,7 +346,7 @@ void addParticion(QString path, QString name, int valorAdd, char valorUnit){
                     int bytePartAc;
                     int bytePartAcF;
                     int bytePartSig;
-                    int fragmento;
+                    int fragmento=0;
                     bytePartAc=mbr.mbr_partitions[indicePart].part_start;
                     bytePartAcF=bytePartAc+mbr.mbr_partitions[indicePart].part_size;
                     if(!ultimaPart){
@@ -398,6 +408,7 @@ void addParticion(QString path, QString name, int valorAdd, char valorUnit){
                         int fragmento = finExt-finLogica;
                         if(fragmento>0){
                             if(fragmento>valorAdd){
+                                ebr.part_size=ebr.part_size+valorAdd;
                                 fseek(archivo,ebr.part_start,SEEK_SET);
                                 fwrite(&ebr,sizeof(EBR),1, archivo);
                                 printf("~~~>Se agrego espacio a la particion exitosamente! \n");
@@ -415,6 +426,7 @@ void addParticion(QString path, QString name, int valorAdd, char valorUnit){
                         if(fragmento>0){
 
                             if(fragmento>valorAdd){
+                                ebr.part_size=ebr.part_size+valorAdd;
                                 fseek(archivo,ebr.part_start,SEEK_SET);
                                 fwrite(&ebr,sizeof(EBR),1, archivo);
                                 printf("~~~>Se agrego espacio a la particion exitosamente! \n");
@@ -455,129 +467,137 @@ void addParticion(QString path, QString name, int valorAdd, char valorUnit){
         printf("ERROR el disco donde se desea agregar/quitar unidades no existe \n");
     }
 }
-void delParticion(){}
-void delParticion(QString direccion, QString nombre, QString typeDel){
-    string auxPath = direccion.toStdString();
-    string auxName = nombre.toStdString();
-    FILE *filep;
-    if((filep = fopen(auxPath.c_str(), "rb+"))){
+void delParticion(QString direccion, QString name, QString valorType){
+    FILE *archivo;
+    if((archivo = fopen(direccion.toStdString().c_str(), "rb+"))){
         MBR mbr;
-        fseek(filep,0,SEEK_SET);
-        fread(&mbr,sizeof (MBR),1,filep);
-        int ind = -1;
-        int indExt = -1;
+        fseek(archivo,0,SEEK_SET);
+        fread(&mbr,sizeof (MBR),1,archivo);
+        char ceros = '\0';
+        bool part=false;
+        bool partExtendida=false;
+        bool partLogica=false;
+        bool banderaExtend=true;
+        int indicePart=0;
+        int indiceExt=0;
         bool flagExt = false;
-        string opc = "";
-        char buffer = '\0';
+
+        string letra = "";
+
         for(int i = 0; i < 4; i++){
-            if((strcmp(mbr.mbr_partitions[i].part_name, auxName.c_str())) == 0){
-                ind = i;
+            if((strcmp(mbr.mbr_partitions[i].part_name, name.toStdString().c_str()) == 0)){
+                indicePart = i;
+                part=true;
                 if(mbr.mbr_partitions[i].part_type == 'E')
-                    flagExt = true;
+                    banderaExtend = true;
                 break;
             }else if(mbr.mbr_partitions[i].part_type == 'E'){
-                indExt = i;
+                indiceExt = i;
+                partExtendida=true;
             }
         }
-        cout << "¿Esta seguro que desea eliminar la particion? Y/N : " ;
-        getline(cin, opc);
-        opc = "Y";
-        if(opc.compare("Y") == 0 || opc.compare("y") == 0){
-            if(ind != -1){//Si hay principales
-                if(!flagExt){//pri
-                    if(typeDel == "fast"){
-                        mbr.mbr_partitions[ind].part_status = '1';
-                        strcpy(mbr.mbr_partitions[ind].part_name,"");
-                        fseek(filep,0,SEEK_SET);
-                        fwrite(&mbr,sizeof(MBR),1,filep);
-
-                    }else{//full
-                        mbr.mbr_partitions[ind].part_status = '1';
-                        strcpy(mbr.mbr_partitions[ind].part_name,"");
-                        fseek(filep,0,SEEK_SET);
-                        fwrite(&mbr,sizeof(MBR),1,filep);
-                        fseek(filep,mbr.mbr_partitions[ind].part_start,SEEK_SET);
-                        fwrite(&buffer,1,mbr.mbr_partitions[ind].part_size,filep);
+        printf("~~~>¿Esta seguro que desea eliminar la particion? Y/N : ");
+        getline(cin, letra);
+        if(letra.compare("Y") == 0 || letra.compare("y") == 0){
+            if(part){//principal
+                if(!banderaExtend){//primaria
+                    if(valorType == "full"){
+                        mbr.mbr_partitions[indicePart].part_status = '1';
+                        strcpy(mbr.mbr_partitions[indicePart].part_name,"");
+                        fseek(archivo,0,SEEK_SET);
+                        fwrite(&mbr,sizeof(MBR),1,archivo);
+                        fseek(archivo,mbr.mbr_partitions[indicePart].part_start,SEEK_SET);
+                        fwrite(&ceros,1,mbr.mbr_partitions[indicePart].part_size,archivo);
+                    }else{//fast
+                        mbr.mbr_partitions[indicePart].part_status = '1';
+                        strcpy(mbr.mbr_partitions[indicePart].part_name,"");
+                        fseek(archivo,0,SEEK_SET);
+                        fwrite(&mbr,sizeof(MBR),1,archivo);
                     }
-                    cout << "La particion primaria fue eliminada con exito" << endl;
+                    printf("~~~>La particion primaria fue eliminada con exito \n");
 
                 }else{//ext
-                    if(typeDel == "fast"){
-                        mbr.mbr_partitions[ind].part_status = '1';
-                        strcpy(mbr.mbr_partitions[ind].part_name,"");
-                        fseek(filep,0,SEEK_SET);
-                        fwrite(&mbr,sizeof(MBR),1,filep);
+                    if(valorType == "full"){
+                        mbr.mbr_partitions[indicePart].part_status = '1';
+                        mbr.mbr_partitions[indicePart].part_type = ' ';
+                        strcpy(mbr.mbr_partitions[indicePart].part_name,"");
+                        fseek(archivo,0,SEEK_SET);
+                        fwrite(&mbr,sizeof(MBR),1,archivo);
+                        fseek(archivo,mbr.mbr_partitions[indicePart].part_start,SEEK_SET);
+                        fwrite(&ceros,1,mbr.mbr_partitions[indicePart].part_size,archivo);
                     }else{//full
-                        mbr.mbr_partitions[ind].part_status = '1';
-                        strcpy(mbr.mbr_partitions[ind].part_name,"");
-                        fseek(filep,0,SEEK_SET);
-                        fwrite(&mbr,sizeof(MBR),1,filep);
-                        fseek(filep,mbr.mbr_partitions[ind].part_start,SEEK_SET);
-                        fwrite(&buffer,1,mbr.mbr_partitions[ind].part_size,filep);
+                        mbr.mbr_partitions[indicePart].part_status = '1';
+                        mbr.mbr_partitions[indicePart].part_type = ' ';
+                        strcpy(mbr.mbr_partitions[indicePart].part_name,"");
+                        fseek(archivo,0,SEEK_SET);
+                        fwrite(&mbr,sizeof(MBR),1,archivo);
+
                     }
-                    cout << "La particion extendida fue eliminada con exito" << endl;
+                    printf("~~~>La particion extendida fue eliminada con exito \n");
 
                 }
             }else{//
-                if(indExt != -1){
-                    bool flag = false;//flag indica si existe
+                if(partExtendida){
                     EBR erb;
-                    fseek(filep,mbr.mbr_partitions[indExt].part_start, SEEK_SET);
-                    fread(&erb,sizeof(EBR),1,filep);
+                    fseek(archivo,mbr.mbr_partitions[indiceExt].part_start, SEEK_SET);
+                    fread(&erb,sizeof(EBR),1,archivo);
                     if(erb.part_size!=0){
-                        fseek(filep, mbr.mbr_partitions[indExt].part_start,SEEK_SET);
-                        while((fread(&erb,sizeof(EBR),1,filep))!=0 && (ftell(filep) < (mbr.mbr_partitions[indExt].part_start + mbr.mbr_partitions[indExt].part_size))) {
-                            if(strcmp(erb.part_name,nombre.toStdString().c_str()) == 0 && erb.part_status != '1'){
-                                flag = true;
+                        fseek(archivo, mbr.mbr_partitions[indiceExt].part_start,SEEK_SET);
+                        while((fread(&erb,sizeof(EBR),1,archivo))!=0 && (ftell(archivo) < (mbr.mbr_partitions[indiceExt].part_start + mbr.mbr_partitions[indiceExt].part_size))) {
+                            if(strcmp(erb.part_name,name.toStdString().c_str()) == 0 && erb.part_status != '1'){//Se encontro
+                                partLogica = true;
                                 break;
                             }else if(erb.part_next == -1){//No se encontro
                                 break;
                             }
                         }
                     }
-                    if(flag){
-                        if(typeDel == "fast"){
+                    if(partLogica){
+                        if(valorType == "full"){//full
                             erb.part_status = '1';
                             strcpy(erb.part_name, "");
-                            fseek(filep, ftell(filep)-sizeof(EBR),SEEK_SET);
-                            fwrite(&erb,sizeof(EBR),1,filep);
-                        }else{//full
+                            fseek(archivo, ftell(archivo)-sizeof(EBR),SEEK_SET);
+                            fwrite(&erb,sizeof(EBR),1,archivo);
+                            fwrite(&ceros,1,erb.part_size,archivo);
+                        }else{//fast
+
                             erb.part_status = '1';
                             strcpy(erb.part_name, "");
-                            fseek(filep, ftell(filep)-sizeof(EBR),SEEK_SET);
-                            fwrite(&erb,sizeof(EBR),1,filep);
-                            fwrite(&buffer,1,erb.part_size,filep);
+                            fseek(archivo, ftell(archivo)-sizeof(EBR),SEEK_SET);
+                            fwrite(&erb,sizeof(EBR),1,archivo);
                         }
-                        cout << "La particion logica fue eliminada con exito" << endl;
+                        printf("~~~>La particion logica fue eliminada con exito \n");
 
                     }else{
-                        cout << "ERROR: no se encuentra la particion que desea eliminar" << endl;
+                        printf("ERROR: no se encuentra la particion que desea eliminar \n");
+
                     }
                 }else{
-                    cout << "ERROR: no se encuentra la particion que desea eliminar" << endl;
+                    printf("ERROR: no se encuentra la particion que desea eliminar \n");
                 }
             }
-        }else if(opc.compare("N") || opc.compare("n") == 0){
-            cout << "Operacion Cancelada" << endl;;
+        }else if(letra.compare("N") || letra.compare("n") == 0){
+            printf("~~Operacion Cancelada \n");
         }else{
-            cout << "Opcion ingresada incorrecta" << endl;
+            printf("~~Letra ingresada incorrecta \n");
         }
 
-        fclose(filep);
+        fclose(archivo);
     }else{
-        cout << "ERROR: el disco que contiene la particion especificada no existe" << endl;
+        printf("ERROR: el disco que contiene la particion especificada no existe \n");
     }
 }
-
 void crearPartPri(QString direccion, QString name, int size, char fit){
     char auxF= fit;
     int sizeBytes = size;
     char buff = '1';
     bool existe=false;
-    bool partext = true;
-    int ext;
+    bool partext = false;
+    bool archivoExist=false;
+    int ext=0;
     FILE *archivo;
     if((archivo = fopen(direccion.toStdString().c_str(),"rb+"))){
+        archivoExist=true;
         MBR mbr;
         fseek(archivo,0,SEEK_SET);
         fread(&mbr, sizeof(MBR),1,archivo);
@@ -605,7 +625,6 @@ void crearPartPri(QString direccion, QString name, int size, char fit){
             }
         }
     }
-    fclose(archivo);
 
     if(fit != 0)
         auxF = fit;
@@ -614,7 +633,7 @@ void crearPartPri(QString direccion, QString name, int size, char fit){
 
 
     MBR mbr;
-    if((archivo = fopen(direccion.toStdString().c_str(), "rb+"))){
+    if(archivo = fopen(direccion.toStdString().c_str(),"rb+")){
         int numPart = 0;
         bool flagPart = false;
         fseek(archivo,0,SEEK_SET);
@@ -636,7 +655,7 @@ void crearPartPri(QString direccion, QString name, int size, char fit){
             printf("~~~>Espacio necesario:  %i Bytes \n",sizeBytes);
             printf("~~~>Espacio disponible:  %i Bytes \n",mbr.mbr_tamanio - utilizado);
             if((mbr.mbr_tamanio - utilizado) >= sizeBytes){
-                if(!partext){
+                if(!existe){
                     if(mbr.mbr_disk_fit == 'B'){
                         int bestF = numPart;
                         for(int i = 0; i < 4; i++){
@@ -699,9 +718,190 @@ void crearPartPri(QString direccion, QString name, int size, char fit){
                     for(int i = 0; i < sizeBytes; i++){
                         fwrite(&buff,1,1,archivo);
                     }
+
                     printf("~~~>La particion primaria fue creada con exito \n");
                 }else{
                     printf("ERROR: Ya existe una particion con el mismo nombre \n");
+
+                }
+
+            }else{
+                printf("ERROR: La particion que desea crear excede el espacio libre \n");
+
+            }
+        }else{
+            printf("ERROR: Ya se llego al limite de particiones (4 particiones por Disco) \n");
+            printf("Para crear una nueva debera eliminar al menos una. \n");
+        }
+        fclose(archivo);
+    }else{
+        printf("ERROR: no existe el Disco especificado \n");
+
+    }
+
+}
+void crearPartExt(QString direccion, QString name, int size, char fit){
+    char auxF= fit;
+    int sizeBytes = size;
+    char unos = '1';
+    bool existe=false;
+    bool partext = false;
+    int ext;
+    FILE *archivo;
+    if((archivo = fopen(direccion.toStdString().c_str(),"rb+"))){
+        MBR mbr;
+        fseek(archivo,0,SEEK_SET);
+        fread(&mbr, sizeof(MBR),1,archivo);
+        for(int i = 0; i < 4; i++){
+            if(strcmp(mbr.mbr_partitions[i].part_name,name.toStdString().c_str()) == 0){
+                existe=true;
+            }else if(mbr.mbr_partitions[i].part_type == 'E'){
+                ext = i;
+                partext=true;
+            }
+        }
+        if(partext){
+            fseek(archivo, mbr.mbr_partitions[ext].part_start,SEEK_SET);
+            EBR ebr;
+            while((fread(&ebr,sizeof(EBR),1,archivo))!=0 && (ftell(archivo) < (mbr.mbr_partitions[ext].part_size + mbr.mbr_partitions[ext].part_start))){
+                if(ebr.part_next == -1){
+                    fclose(archivo);
+                    existe= false;
+                }
+                if(strcmp(ebr.part_name,name.toStdString().c_str()) == 0){
+                    fclose(archivo);
+                    existe= true;
+                }
+            }
+        }
+    }
+
+    if(fit != 0)
+        auxF = fit;
+    else
+        auxF = 'W';
+
+    EBR ebr;
+    MBR mbr;
+    if((archivo = fopen(direccion.toStdString().c_str(), "rb+"))){
+        int numPart = 0;
+        bool banderaPart = false;
+        fseek(archivo,0,SEEK_SET);
+        fread(&mbr,sizeof(MBR),1,archivo);
+        for(int i = 0; i < 4; i++){
+            if (mbr.mbr_partitions[i].part_type == 'E'){
+                partext = true;
+                break;
+            }
+        }
+        for(int i = 0; i < 4; i++){
+            if(mbr.mbr_partitions[i].part_start == -1 || (mbr.mbr_partitions[i].part_status == '1' && mbr.mbr_partitions[i].part_size>=sizeBytes)){
+                banderaPart = true;
+                numPart = i;
+                break;
+            }
+        }
+        if(!partext){
+            int utilizado = 0;
+            for(int i = 0; i < 4; i++){
+                if(mbr.mbr_partitions[i].part_status!='1'){
+                    utilizado += mbr.mbr_partitions[i].part_size;
+                }
+            }
+            printf("~~~>Espacio necesario:  %i Bytes \n",sizeBytes);
+            printf("~~~>Espacio disponible:  %i Bytes \n",mbr.mbr_tamanio - utilizado);
+            if((mbr.mbr_tamanio - utilizado) >= sizeBytes){
+                if(!partext){
+                    if(mbr.mbr_disk_fit == 'B'){
+                        int bf = numPart;
+                        for(int i = 0; i < 4; i++){
+                            if(mbr.mbr_partitions[i].part_start == -1 || (mbr.mbr_partitions[i].part_status == '1' && mbr.mbr_partitions[i].part_size>=sizeBytes)){
+                                if(i != numPart){
+                                    if(mbr.mbr_partitions[bf].part_size > mbr.mbr_partitions[i].part_size){
+                                        bf = i;
+                                        break;
+                                        }
+                                    }
+                                }
+                        }
+                        mbr.mbr_partitions[bf].part_type = 'E';
+                        mbr.mbr_partitions[bf].part_fit = auxF;
+                        if(bf == 0){
+                            mbr.mbr_partitions[bf].part_start = sizeof(mbr);
+                        }else{
+                            mbr.mbr_partitions[bf].part_start = mbr.mbr_partitions[bf-1].part_start + mbr.mbr_partitions[bf-1].part_size;
+                        }
+                        mbr.mbr_partitions[bf].part_size = sizeBytes;
+                        mbr.mbr_partitions[bf].part_status = '0';
+                        strcpy(mbr.mbr_partitions[bf].part_name,name.toStdString().c_str());
+                        fseek(archivo,0,SEEK_SET);
+                        fwrite(&mbr,sizeof(MBR),1,archivo);
+                        fseek(archivo, mbr.mbr_partitions[numPart].part_start,SEEK_SET);
+                        ebr.part_fit = auxF;
+                        ebr.part_status = '0';
+                        ebr.part_start = mbr.mbr_partitions[numPart].part_start;
+                        ebr.part_size = 0;
+                        ebr.part_next = -1;
+                        strcpy(ebr.part_name, "");
+                    }else if(mbr.mbr_disk_fit == 'F'){
+                        mbr.mbr_partitions[numPart].part_type = 'E';
+                        mbr.mbr_partitions[numPart].part_fit = auxF;
+                        if(numPart == 0){
+                            mbr.mbr_partitions[numPart].part_start = sizeof(mbr);
+                        }else{
+                            mbr.mbr_partitions[numPart].part_start = mbr.mbr_partitions[numPart-1].part_start + mbr.mbr_partitions[numPart-1].part_size;
+                        }
+                        mbr.mbr_partitions[numPart].part_size = sizeBytes;
+                        mbr.mbr_partitions[numPart].part_status = '0';
+                        strcpy(mbr.mbr_partitions[numPart].part_name,name.toStdString().c_str());
+                        fseek(archivo,0,SEEK_SET);
+                        fwrite(&mbr,sizeof(MBR),1,archivo);
+                        fseek(archivo, mbr.mbr_partitions[numPart].part_start,SEEK_SET);
+                        ebr.part_fit = auxF;
+                        ebr.part_status = '0';
+                        ebr.part_start = mbr.mbr_partitions[numPart].part_start;
+                        ebr.part_size = 0;
+                        ebr.part_next = -1;
+                        strcpy(ebr.part_name, "");
+                    }else if(mbr.mbr_disk_fit == 'W'){
+                        int  wInd= numPart;
+                        for(int i = 0; i < 4; i++){
+                            if(mbr.mbr_partitions[i].part_start == -1 || (mbr.mbr_partitions[i].part_status == '1' && mbr.mbr_partitions[i].part_size>=sizeBytes)){
+                                if(i != numPart){
+                                    if(mbr.mbr_partitions[wInd].part_size < mbr.mbr_partitions[i].part_size){
+                                        wInd = i;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        mbr.mbr_partitions[wInd].part_type = 'E';
+                        mbr.mbr_partitions[wInd].part_fit = auxF;
+                        if(wInd == 0){
+                            mbr.mbr_partitions[wInd].part_start = sizeof(mbr);
+                        }else{
+                            mbr.mbr_partitions[wInd].part_start = mbr.mbr_partitions[wInd-1].part_start + mbr.mbr_partitions[wInd-1].part_size;
+                        }
+                        mbr.mbr_partitions[wInd].part_size = sizeBytes;
+                        mbr.mbr_partitions[wInd].part_status = '0';
+                        strcpy(mbr.mbr_partitions[wInd].part_name,name.toStdString().c_str());
+                        fseek(archivo,0,SEEK_SET);
+                        fwrite(&mbr,sizeof(MBR),1,archivo);
+                        fseek(archivo, mbr.mbr_partitions[numPart].part_start,SEEK_SET);
+                        ebr.part_fit = auxF;
+                        ebr.part_status = '0';
+                        ebr.part_start = mbr.mbr_partitions[numPart].part_start;
+                        ebr.part_size = 0;
+                        ebr.part_next = -1;
+                        strcpy(ebr.part_name, "");
+                    }
+                    fwrite(&ebr,sizeof(EBR),1,archivo);
+                    for(int i = 0; i < (size - (int)sizeof(EBR)); i++){
+                        fwrite(&unos,1,1,archivo);
+                    }
+                    printf("~~~>La particion Extendida fue creada con exito \n");
+                }else{
+                    printf("ERROR: Ya existe una particion con el mismo nombre o una particion Extendida \n");
 
                 }
 
@@ -720,3 +920,128 @@ void crearPartPri(QString direccion, QString name, int size, char fit){
     }
 }
 
+void crearLogica(QString direccion, QString name, int size, char fit){
+    char auxF= fit;
+    int sizeBytes = size;
+    char unos = '1';
+    bool existe=false;
+    bool partext = false;
+    int ext;
+    FILE *archivo;
+    if((archivo = fopen(direccion.toStdString().c_str(),"rb+"))){
+        MBR mbr;
+        fseek(archivo,0,SEEK_SET);
+        fread(&mbr, sizeof(MBR),1,archivo);
+        for(int i = 0; i < 4; i++){
+            if(strcmp(mbr.mbr_partitions[i].part_name,name.toStdString().c_str()) == 0){
+                fclose(archivo);
+                existe=true;
+            }else if(mbr.mbr_partitions[i].part_type == 'E'){
+                ext = i;
+                partext=true;
+            }
+        }
+        if(partext){
+            fseek(archivo, mbr.mbr_partitions[ext].part_start,SEEK_SET);
+            EBR ebr;
+            while((fread(&ebr,sizeof(EBR),1,archivo))!=0 && (ftell(archivo) < (mbr.mbr_partitions[ext].part_size + mbr.mbr_partitions[ext].part_start))){
+                if(ebr.part_next == -1){
+                    existe= false;
+                }
+                if(strcmp(ebr.part_name,name.toStdString().c_str()) == 0){
+                    existe= true;
+                }
+            }
+        }
+    }
+
+    if(fit != 0)
+        auxF = fit;
+    else
+        auxF = 'W';
+
+    EBR ebr;
+    MBR mbr;
+    if((archivo = fopen(direccion.toStdString().c_str(), "rb+"))){
+        int numPart = 0;
+        bool banderaPart = false;
+        fseek(archivo,0,SEEK_SET);
+        fread(&mbr,sizeof(MBR),1,archivo);
+        for(int i = 0; i < 4; i++){
+            if (mbr.mbr_partitions[i].part_type == 'E'){
+                partext = true;
+                numPart=i;
+                break;
+            }
+        }
+
+        if(!existe){
+            int utilizado = 0;
+            for(int i = 0; i < 4; i++){
+                if(mbr.mbr_partitions[i].part_status!='1'){
+                    utilizado += mbr.mbr_partitions[i].part_size;
+                }
+            }
+            printf("~~~>Espacio necesario:  %i Bytes \n",sizeBytes);
+            //printf("~~~>Espacio disponible:  %i Bytes \n",mbr.mbr_tamanio - utilizado);
+            if((mbr.mbr_tamanio - utilizado) >= sizeBytes){
+                if(!existe){
+                    int inicioEx=mbr.mbr_partitions[numPart].part_start;
+                    fseek(archivo,inicioEx,SEEK_SET);
+                    fread(&ebr,sizeof(EBR),1,archivo);
+                    if(ebr.part_size=0){
+                        if(mbr.mbr_partitions[numPart].part_size >= size){
+                            ebr.part_status = '0';
+                            ebr.part_fit = auxF;
+                            ebr.part_start = ftell(archivo) - sizeof(EBR); //Para regresar al comienzo de la extendida
+                            ebr.part_size = size;
+                            ebr.part_next = -1;
+                            strcpy(ebr.part_name, name.toStdString().c_str());
+                            fseek(archivo, mbr.mbr_partitions[numPart].part_start ,SEEK_SET);
+                            fwrite(&ebr,sizeof(EBR),1,archivo);
+                            printf("La particion logica fue creada con exito \n");
+                        }else{
+                            printf("ERROR la particion logica a crear excede el espacio disponible de la particion extendida \n");
+                        }
+                    }else{
+
+                        while((ebr.part_next != -1) && (ftell(archivo) < (mbr.mbr_partitions[numPart].part_size + mbr.mbr_partitions[numPart].part_start))){
+                        fseek(archivo,ebr.part_next,SEEK_SET);
+                        fread(&ebr,sizeof(EBR),1,archivo);
+                        }
+                        int espNece = ebr.part_start + ebr.part_size + size;
+                        if(espNece <= (mbr.mbr_partitions[numPart].part_size + mbr.mbr_partitions[numPart].part_start)){
+                            ebr.part_next = ebr.part_start + ebr.part_size;
+                            fseek(archivo,ftell(archivo) - sizeof (EBR),SEEK_SET);
+                            fwrite(&ebr, sizeof(EBR),1 ,archivo);
+                            fseek(archivo,ebr.part_start + ebr.part_size, SEEK_SET);
+                            ebr.part_status = 0;
+                            ebr.part_fit = auxF;
+                            ebr.part_start = ftell(archivo);
+                            ebr.part_size = size;
+                            ebr.part_next = -1;
+                            strcpy(ebr.part_name,name.toStdString().c_str());
+                            fwrite(&ebr,sizeof(EBR),1,archivo);
+                            printf("La particion logica fue creada con exito \n");
+                        }
+
+                    }
+                }else{
+                    printf("ERROR: la particion logica que desea crear excede el \n");
+                    printf("espacio disponible de la particion extendida utilizada. \n");
+
+                }
+
+            }else{
+                printf("ERROR: Es necesaria una particion extendida para guardar la particion logica \n");
+
+            }
+        }else{
+            printf("ERROR: Ya existe una particion con el mismo nombre \n");
+        }
+    fclose(archivo);
+    }else{
+        printf("ERROR: no existe el Disco especificado \n");
+
+    }
+}

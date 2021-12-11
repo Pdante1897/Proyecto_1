@@ -80,7 +80,7 @@ INICIO:  COMANDO {listNodos= new Node("",""); listNodos=$$;};
 
 COMANDO: mkdisk MKDISK {$$=new Node("mkdisk",""); $$->agregar(*$2); }
         | RMDISK  { $$ = $1; }
-        | fdisk FDISK { $$ = new Node("FDISK","");
+        | fdisk FDISK { $$ = new Node("fdisk","");
                         $$->agregar(*$2);
                         };
 
@@ -121,8 +121,8 @@ FDISK: FDISK PARAMETROFDK {
                       };
 PARAMETROFDK: PARAMETROMKD { $$ = $1; }
               | type igual caracter { $$ = new Node("type",$3); }
-              | del igual fast { $$ = new Node("del", "fast"); }
-              | del igual full { $$ = new Node("del", "full"); }
+              | del igual fast { $$ = new Node("delete", "fast"); }
+              | del igual full { $$ = new Node("delete", "full"); }
               | name igual identificador { $$ = new Node("name", $3); }
               | name igual cadena { $$ = new Node("name", $3); }
               | add igual num { $$ = new Node("add", $3); };

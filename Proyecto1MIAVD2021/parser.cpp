@@ -1392,7 +1392,7 @@ yyreduce:
 
   case 5:
 #line 83 "parser.y"
-                      { (yyval.Node) = new Node("FDISK","");
+                      { (yyval.Node) = new Node("fdisk","");
                         (yyval.Node)->agregar(*(yyvsp[0].Node));
                         }
 #line 1399 "parser.cpp"
@@ -1513,13 +1513,13 @@ yyreduce:
 
   case 22:
 #line 124 "parser.y"
-                               { (yyval.Node) = new Node("del", "fast"); }
+                               { (yyval.Node) = new Node("delete", "fast"); }
 #line 1518 "parser.cpp"
     break;
 
   case 23:
 #line 125 "parser.y"
-                               { (yyval.Node) = new Node("del", "full"); }
+                               { (yyval.Node) = new Node("delete", "full"); }
 #line 1524 "parser.cpp"
     break;
 

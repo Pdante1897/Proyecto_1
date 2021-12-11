@@ -20,7 +20,7 @@ extern int linea;
 extern int columna;
 extern int yylineno;
 extern Node *listNodos; //lista de nodos
-extern QList<ParticionMount> partMontadas;
+extern QList<ParticionMount> partMontadas = *new QList<ParticionMount>();
 
 //para distinguir el comando ingresado
 enum choice{
@@ -97,7 +97,9 @@ void ejecutarComando(Node Lista){
     }
     case FDK:{
         Node nodito = nodo.hijos.at(0);
-        validarFDk(&nodito);
+        if(validarFDk(&nodito)){
+            printf("Comando reconocido correctamente. \n \n");
+        };
         break;
     }
     }

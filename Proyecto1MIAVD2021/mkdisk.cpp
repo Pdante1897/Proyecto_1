@@ -77,15 +77,15 @@ bool validarMkDisk(Node *Raiz){
         switch (nodito.tipo){
         case FIT:{
             if(banderaFit){
-                string fit=nodito.hijos.at(0).valor.toStdString();
-                if(fit == "b" or fit == "B"){
+                QString fit=nodito.hijos.at(0).valor.toStdString().c_str();
+                if(fit.at(0) == "b" or fit.at(0) == "B"){
                     fit = "B";
-                }else if(fit == "f" or fit == "F"){
+                }else if(fit.at(0) == "f" or fit.at(0) == "F"){
                     fit = "F";
-                }else if(fit == "w" or fit == "W"){
+                }else if(fit.at(0) == "w" or fit.at(0) == "W"){
                     fit = "W";
                 }
-                disco.fit=fit[0];
+                disco.fit=fit.toStdString().at(0);
                 printf("~~~>tipo de ajuste = %c\n",disco.fit);
                 banderaFit=false;
             }else{
