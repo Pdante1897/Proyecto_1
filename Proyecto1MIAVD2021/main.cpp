@@ -20,7 +20,8 @@ extern int linea;
 extern int columna;
 extern int yylineno;
 extern Node *listNodos; //lista de nodos
-extern QList<ParticionMount> partMontadas = *new QList<ParticionMount>();
+extern QList<ParticionMount> partMontadas=*new QList<ParticionMount>();
+extern QList<QString> pathsMontados =*new QList<QString>();;;
 
 //para distinguir el comando ingresado
 enum choice{
@@ -31,11 +32,19 @@ enum choice{
     PATH=5,
     RMDK=6,
     FDK=7,
+    MOUNT = 12,
+    UMOUNT=13,
+    MKFS=14,
+    EXEC=15,
+    PAUSE=16,
+    REP=17
+
 };
 //Metodo main
 int main()
 {
-    //MBR mbr;
+    partMontadas=*new QList<ParticionMount>();
+    pathsMontados=*new QList<QString>();
     //QString cadena = "/home/bryan/carpeta/disko.disk";
     //verificarRuta(cadena);
     //makeDisk(cadena,10,mbr);
@@ -101,6 +110,9 @@ void ejecutarComando(Node Lista){
             printf("Comando reconocido correctamente. \n \n");
         };
         break;
+    }case MOUNT:{
+        Node nodito = nodo.hijos.at(0);
+        validarMontaje(&nodito);
     }
     }
 }

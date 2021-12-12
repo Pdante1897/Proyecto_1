@@ -399,10 +399,10 @@ disk.o: ../Proyecto1MIAVD2021/disk.cpp ../Proyecto1MIAVD2021/disk.h
 
 fdisk.o: ../Proyecto1MIAVD2021/fdisk.cpp ../Proyecto1MIAVD2021/fdisk.h \
 		../Proyecto1MIAVD2021/Node.h \
+		../Proyecto1MIAVD2021/clases.h \
 		../Proyecto1MIAVD2021/estructuras.h \
 		../Proyecto1MIAVD2021/main.h \
-		../Proyecto1MIAVD2021/disk.h \
-		../Proyecto1MIAVD2021/clases.h
+		../Proyecto1MIAVD2021/disk.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o fdisk.o ../Proyecto1MIAVD2021/fdisk.cpp
 
 main.o: ../Proyecto1MIAVD2021/main.cpp ../Proyecto1MIAVD2021/main.h \

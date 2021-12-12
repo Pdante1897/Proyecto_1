@@ -57,7 +57,37 @@
 %token <text> cadena
 %token <text> identificador
 %token <text> ruta
-
+%token <text> mkfs
+%token <text> login
+%token <text> logout
+%token <text> mkgrp
+%token <text> rmgrp
+%token <text> mkusr
+%token <text> rmusr
+%token <text> Rchmod
+%token <text> mkfile
+%token <text> cat
+%token <text> rem
+%token <text> edit
+%token <text> ren
+%token <text> Rmkdir
+%token <text> cp
+%token <text> mv
+%token <text> find
+%token <text> Rchown
+%token <text> chgrp
+%token <text> pausa
+%token <text> recovery
+%token <text> loss
+%token <text> fs
+%token <text> fs2
+%token <text> fs3
+%token <text> usr
+%token <text> pwd
+%token <text> grp
+%token <text> ugo
+%token <text> r
+%token <text> p
 
 %token <text> directorio
 
@@ -70,7 +100,14 @@
 %type <Node> RMDISK
 %type <Node> FDISK
 %type <Node> PARAMETROFDK
-
+%type <Node> MOUNT
+%type <Node> PARAMETRO_M
+%type <Node> UMOUNT
+%type <Node> MKFS
+%type <Node> PARAM_MKFS
+%type <Node> EXEC
+%type <Node> REP
+%type <Node> PARAMETRO_REP
 
 %start INICIO
 
@@ -82,7 +119,20 @@ COMANDO: mkdisk MKDISK {$$=new Node("mkdisk",""); $$->agregar(*$2); }
         | RMDISK  { $$ = $1; }
         | fdisk FDISK { $$ = new Node("fdisk","");
                         $$->agregar(*$2);
-                        };
+                        }
+        | mount MOUNT {
+                         $$ = new Node("mount", "");
+                         $$->agregar(*$2);
+                       }
+        | UMOUNT { $$ = $1; }
+        | mkfs MKFS {
+                        $$ = new Node("mkfs","");
+                        $$->agregar(*$2);
+                     }
+        | EXEC { $$ = $1; }
+        | rep REP { $$ = new Node("rep","");
+                     $$->agregar(*$2);
+                   };
 
 
 
@@ -126,3 +176,66 @@ PARAMETROFDK: PARAMETROMKD { $$ = $1; }
               | name igual identificador { $$ = new Node("name", $3); }
               | name igual cadena { $$ = new Node("name", $3); }
               | add igual num { $$ = new Node("add", $3); };
+
+MOUNT: MOUNT PARAMETRO_M {
+                           $$ = $1;
+                           $$->agregar(*$2);
+                         }
+       | PARAMETRO_M {
+                        $$ = new Node("parametros","");
+                        $$->agregar(*$1);
+                      };
+
+PARAMETRO_M: path igual cadena { $$ = new Node("path",$3); }
+             | path igual ruta { $$ = new Node("path", $3); }
+             | name igual identificador { $$ = new Node("name", $3); }
+             | name igual cadena { $$ = new Node("name",$3); };
+
+UMOUNT: umount id igual idmount {
+                                          $$ = new Node("umount", "");
+                                          Node *n = new Node("id",$4);
+                                          $$->agregar(*n);
+                                        };
+
+
+MKFS: MKFS PARAM_MKFS {
+                        $$ = $1;
+                        $$->agregar(*$2);
+                      }
+      | PARAM_MKFS {
+                      $$ = new Node("parametros", "");
+                      $$->agregar(*$1);
+                   };
+
+PARAM_MKFS: id igual idmount{ $$ = new Node("ident",$3); }
+            | type igual fast { $$ = new Node("type", "fast"); }
+            | type igual full { $$ = new Node("type", "full"); }
+            | fs igual fs2 { $$ = new Node("FS", "2fs"); }
+            | fs igual fs3 { $$ = new Node("FS", "3fs"); };
+
+EXEC: exec path igual cadena {
+              $$ = new Node("exec","");
+              Node *path = new Node("path", $4);
+              $$->agregar(*path);
+              }
+        | exec path igual ruta {
+              $$ = new Node("exec","");
+              Node *n = new Node("path", $4);
+              $$->agregar(*n);
+              };
+              
+REP: REP PARAMETRO_REP{
+                     $$ = $1;
+                     $$->agregar(*$2);
+                    }
+     | PARAMETRO_REP
+    {
+                    $$ = new Node("parametros", "");
+                    $$->agregar(*$1);
+                  };
+
+PARAMETRO_REP: name igual mbr { $$ = new Node("name","mbr"); }
+             | name igual disk { $$ = new Node("name","disk"); }
+             | path igual cadena{ $$ = new Node("path", $3); }
+             | path igual ruta { $$ = new Node("path",$3); }
+             | id igual idmount { $$ = new Node("ident", $3); };

@@ -80,7 +80,38 @@ extern int yydebug;
     cadena = 286,
     identificador = 287,
     ruta = 288,
-    directorio = 289
+    mkfs = 289,
+    login = 290,
+    logout = 291,
+    mkgrp = 292,
+    rmgrp = 293,
+    mkusr = 294,
+    rmusr = 295,
+    Rchmod = 296,
+    mkfile = 297,
+    cat = 298,
+    rem = 299,
+    edit = 300,
+    ren = 301,
+    Rmkdir = 302,
+    cp = 303,
+    mv = 304,
+    find = 305,
+    Rchown = 306,
+    chgrp = 307,
+    pausa = 308,
+    recovery = 309,
+    loss = 310,
+    fs = 311,
+    fs2 = 312,
+    fs3 = 313,
+    usr = 314,
+    pwd = 315,
+    grp = 316,
+    ugo = 317,
+    r = 318,
+    p = 319,
+    directorio = 320
   };
 #endif
 
@@ -94,7 +125,7 @@ union YYSTYPE
         char text[399];
     
 
-#line 98 "parser.h"
+#line 129 "parser.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

@@ -59,7 +59,20 @@ INITIAL
     "mbr"       { return mbr; }
     "disk"      { return disk; }
 
-
+    "mkfs"       { return mkfs; }
+    "login"      { return login; }
+    "logout"     { return logout; }
+    "mkgrp"      { return mkgrp; }
+    "rmgrp"      { return rmgrp; }
+    "mkusr"      { return mkusr; }
+    "rmusr"      { return rmusr; }
+    "chmod"      { return Rchmod; }
+    "mkfile"     { return mkfile; }
+    "-fs"        { return fs; }
+    "2fs"        { return fs2; }
+    "3fs"        { return fs3; }
+    "-r"         { return r; }
+    "-p"         { return p; }
 
     "~:~"         { return igual; }
 

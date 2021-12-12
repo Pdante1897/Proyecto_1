@@ -18,7 +18,7 @@
 
 using namespace std;
 extern QList<ParticionMount> partMontadas;
-
+extern QList<QString> pathsMontados;
 enum choice{
     SIZE=2,
     FIT=3,
@@ -1045,3 +1045,218 @@ void crearLogica(QString direccion, QString name, int size, char fit){
 
     }
 }
+
+int Letra(QString path){
+    int letra=97;
+    if (pathsMontados.contains(path)){
+        for(int i=0; i<partMontadas.length();i++){
+            if(partMontadas.at(i).dir==path){
+                letra=partMontadas.at(i).letra;
+                return letra;
+            }
+        }
+    }
+    for(int i=0; i<pathsMontados.length();i++){
+        letra=i+97+1;
+    }
+    return letra;
+}
+
+int Numero(QString path, QString name){
+    int num=1;
+    for(int i=0; i<partMontadas.length();i++){
+        if(partMontadas.at(i).dir==path){
+            num=i+2;
+            if(partMontadas.at(i).name==name){
+                return num=-1;
+            }
+        }
+
+    }
+    return num;
+}
+bool validarMontaje(Node *Raiz){
+    bool banderaMount = true;
+    bool banderaPath = true;
+    bool banderaName = true;
+    QString valorPath="";
+    QString valorName="";
+    for(int i=0; i< Raiz->hijos.length(); i++){
+        Node nodito=Raiz->hijos.at(i);
+        nodito.asignarTipo();
+        switch (nodito.tipo) {
+        case PATH:{
+            if(banderaPath){
+                valorPath=nodito.valor;
+                valorPath=valorPath.replace("\"","");
+                banderaPath=false;
+                break;
+            }else{
+                printf("Error! Ya fue definido el parametro -PATH \n");
+                return !banderaMount;
+            }
+            break;
+        }
+        case NAME:{
+            if(banderaName){
+                valorName = nodito.valor;
+                valorName = valorName.replace("\"", "");
+                banderaName=false;
+                break;
+            }else{
+                printf("Error! Ya fue definido el parametro -NAME \n");
+                return !banderaMount;
+            }
+            break;
+        }
+        }
+    }
+    if(banderaMount){
+        if(!banderaPath){//Parametro obligatorio
+            if(!banderaName){//Parametro obligtaorio
+                int indicePart = 0;
+                bool existePartP=false;
+                bool existePartE=false;
+                bool existePartL=false;
+                FILE *archivito;
+                if((archivito = fopen(valorPath.toStdString().c_str(),"rb+"))){
+                    MBR mbr;
+                    fseek(archivito,0,SEEK_SET);
+                    fread(&mbr,sizeof(MBR),1,archivito);
+                    for(int i = 0; i < 4; i++){
+                        if(mbr.mbr_partitions[i].part_status != '1'){
+                            if(strcmp(mbr.mbr_partitions[i].part_name,valorName.toStdString().c_str()) == 0){
+                                indicePart= i;
+                                existePartP=true;
+                            }
+                        }
+                    }
+
+                }
+                if(!existePartP and(archivito = fopen(valorPath.toStdString().c_str(),"rb+"))){
+                    int ext=0;
+                    MBR mbr;
+                    EBR ebr;
+                    fseek(archivito,0,SEEK_SET);
+                    fread(&mbr,sizeof(MBR),1,archivito);
+                    for(int i = 0; i < 4; i++){
+                        if(mbr.mbr_partitions[i].part_type == 'E'){
+                            indicePart = i;
+                            ext=i;
+                            existePartE= true;
+                            break;
+                        }
+                    }
+                    if(existePartE){
+                        fseek(archivito, mbr.mbr_partitions[ext].part_start,SEEK_SET);
+                        while(fread(&ebr,sizeof(EBR),1,archivito)!=0 && (ftell(archivito) < mbr.mbr_partitions[ext].part_start + mbr.mbr_partitions[ext].part_size)){
+                            if(strcmp(ebr.part_name, valorName.toStdString().c_str()) == 0){
+                                indicePart = (ftell(archivito) - sizeof(EBR));
+                                existePartL=true;
+                            }
+                        }
+                    }
+                    fclose(archivito);
+                }
+
+                if(existePartP){
+                    FILE *archivo;
+                    if((archivo = fopen(valorPath.toStdString().c_str(),"rb+"))){
+                        MBR mbr;
+                        fseek(archivo, 0, SEEK_SET);
+                        fread(&mbr, sizeof(MBR),1,archivo);
+                        mbr.mbr_partitions[indicePart].part_status = '2';
+                        fseek(archivo,0,SEEK_SET);
+                        fwrite(&mbr,sizeof(MBR),1,archivo);
+                        fclose(archivo);
+                        int letra = Letra(valorPath);
+                        int num = Numero(valorPath,valorName);
+                        if(num == -1){
+                            printf("ERROR la particion ya esta montada \n");
+                        }else{
+                            char auxL = static_cast<char>(letra);
+                            string id="vd";
+                            id += auxL + to_string(num);
+                            ParticionMount *noditoM= new ParticionMount(valorPath,valorName,auxL,num, id.c_str());
+                            if(!pathsMontados.contains(valorPath)){
+                                pathsMontados.append(valorPath);
+                            }
+                            partMontadas.append(*noditoM);
+
+                            printf("Particion montada con exito \n");
+                            mostList();
+                        }
+                    }else{
+                        printf("ERROR: No se encuentra el disco \n");
+
+                    }
+                }else{//Posiblemente logica
+                    if(existePartL){
+                        FILE *filep;
+                        if((filep = fopen(valorPath.toStdString().c_str(), "rb+"))){
+                            EBR extendedBoot;
+                            fseek(filep, indicePart, SEEK_SET);
+                            fread(&extendedBoot, sizeof(EBR),1,filep);
+                            extendedBoot.part_status = '2';
+                            fseek(filep,indicePart,SEEK_SET);
+                            fwrite(&extendedBoot,sizeof(EBR),1, filep);
+                            fclose(filep);
+
+                            int letra = Letra(valorPath);
+                            if(letra == -1){
+                                printf("ERROR: la particion ya esta montada \n");
+
+                            }else{
+                                int num = Numero(valorPath,valorName);
+                                char auxL = static_cast<char>(letra);
+                                string id="vd";
+                                id += auxL + to_string(num);
+                                ParticionMount *noditoM = new ParticionMount(valorPath, valorName, auxL, num, id.c_str());
+                                partMontadas.append(*noditoM);
+                                if(!pathsMontados.contains(valorPath)){
+                                    pathsMontados.append(valorPath);
+                                }
+                                printf("La Particion fue montada con exito \n");
+
+                                mostList();
+                            }
+                        }else{
+                            printf("ERROR: No se encuentra el disco \n");
+
+                        }
+                    }else{
+                        printf("ERROR: No se encuentra la particion a montar \n");
+
+                    }
+                }
+            }else{
+                printf("ERROR: Parametro Name no definido \n");
+
+            }
+        }else{
+            printf("ERROR: Parametro PATH no definido \n");
+        }
+    }
+}
+
+void montarParticion(Node *Raiz){
+
+}
+
+void mostList(){
+    printf("--------------------------------------------------------------------------------\n");
+    printf("|                        Particiones montadas                                  |\n");
+    printf("--------------------------------------------------------------------------------\n");
+    printf("| Path                      | Nombre                        | ID               |\n");
+    printf("--------------------------------------------------------------------------------\n");
+    ParticionMount aux = *new ParticionMount("","",' ',0,"");
+    for(int i=0; i<partMontadas.length();i++){
+        aux=partMontadas.at(i);
+
+        cout << "| "<< aux.dir.toStdString()<<"           " << aux.name.toStdString() << "             " <<aux.id.toStdString() << endl;
+        cout << "--------------------------------------------------------------------------------" << endl;
+    }
+}
+
+
+

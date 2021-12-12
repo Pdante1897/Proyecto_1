@@ -18,6 +18,13 @@ void Node::asignarTipo(){
     if (this->nombre=="type"){this->tipo=9;return;}
     if (this->nombre=="delete"){this->tipo=10;return;}
     if (this->nombre=="name"){this->tipo=11;return;}
+    if (this->nombre=="mount"){this->tipo=12;return;}
+    if (this->nombre=="umount"){this->tipo=13;return;}
+    if (this->nombre=="mkfs"){this->tipo=14;return;}
+    if (this->nombre=="exec"){this->tipo=15;return;}
+    if (this->nombre=="pause"){this->tipo=16;return;}
+    if (this->nombre=="rep"){this->tipo=17;return;}
+
 
 
 
