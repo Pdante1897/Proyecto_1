@@ -132,7 +132,10 @@ COMANDO: mkdisk MKDISK {$$=new Node("mkdisk",""); $$->agregar(*$2); }
         | EXEC { $$ = $1; }
         | rep REP { $$ = new Node("rep","");
                      $$->agregar(*$2);
-                   };
+                   }
+        | pausa {
+                        $$ = new Node("pause","");
+                     };
 
 
 

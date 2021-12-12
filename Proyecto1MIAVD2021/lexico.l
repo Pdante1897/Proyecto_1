@@ -68,6 +68,8 @@ INITIAL
     "rmusr"      { return rmusr; }
     "chmod"      { return Rchmod; }
     "mkfile"     { return mkfile; }
+    "pause"     { return pausa; }
+
     "-fs"        { return fs; }
     "2fs"        { return fs2; }
     "3fs"        { return fs3; }

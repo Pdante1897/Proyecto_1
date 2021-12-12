@@ -113,7 +113,30 @@ void ejecutarComando(Node Lista){
     }case MOUNT:{
         Node nodito = nodo.hijos.at(0);
         validarMontaje(&nodito);
+        break;
+    }case PAUSE:{
+        printf("~~~>Sistema en pausa! -Presione una tecla para continuar... ");
+        std::cin.get();
+        break;
+
+    }case EXEC:{
+        string path = listNodos->hijos.at(0).valor.toStdString();
+        FILE *archivo;
+        if((archivo = fopen(path.c_str(),"r"))){
+            char line[400]="";
+            memset(line,0,sizeof(line));
+            while(fgets(line,sizeof line,archivo)){
+                if(line[0]!='\n'){
+                    printf("~ %s",line);
+                    leerLComando(line);
+                }
+                memset(line,0,sizeof(line));
+            }
+            fclose(archivo);
+        }else
+            printf("ERROR: script no encontrado\n");
     }
+        break;
     }
 }
 
