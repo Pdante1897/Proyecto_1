@@ -133,10 +133,26 @@ void ejecutarComando(Node Lista){
                 memset(line,0,sizeof(line));
             }
             fclose(archivo);
-        }else
+        }else{
             printf("ERROR: script no encontrado\n");
-    }
+        }break;
+    }case UMOUNT:{
+        QString id = listNodos->hijos.at(0).valor;
+        bool eliminado=false;
+        for(int i=0; i<partMontadas.length();i++){
+            if(partMontadas.at(i).id==id){
+                partMontadas.removeAt(i);
+                printf("La unidad fue desmontada con exito! \n");
+                eliminado = true;
+                break;
+            }
+
+        }
+        if(!eliminado){printf("ERROR: no se encuentra montada la unidad \n");}
         break;
+    }case MKFS:{
+
+    }
     }
 }
 

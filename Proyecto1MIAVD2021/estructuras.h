@@ -58,7 +58,7 @@ typedef struct{
     int i_block[15];
     char i_type;
     int i_perm;
-}InodoTable;
+}TablaInodos;
 
 typedef struct{
     char b_name[12];
@@ -91,15 +91,15 @@ typedef struct  {
     char ruta[100];
     int estado;
     particionDisk particiones[99];
-}Disk;
+}Disko;
 
 typedef struct{
-    char journal_operation_type[10];
-    int journal_type;//Archivo/Carpeta
-    char journal_name[100];
-    char journal_content[100];
-    time_t journal_date;
-    int journal_owner;
-    int journal_permissions;
+    char Journal__Tipo_Operacion[10];
+    int Journal__tipo;//Archivo/Carpeta
+    char Journal__nombre[100];
+    char Journal__contenido[100];
+    time_t Journal__fecha;
+    int journal_propietario;
+    int Journal__permisos;
 }Journal;
 #endif // ESTRUCTURAS_H

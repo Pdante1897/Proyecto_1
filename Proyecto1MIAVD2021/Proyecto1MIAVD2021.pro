@@ -14,6 +14,7 @@ SOURCES += \
         fdisk.cpp \
         main.cpp \
         mkdisk.cpp \
+        mkfs.cpp \
         parser.cpp \
         particion.cpp \
         scanner.cpp
@@ -31,6 +32,7 @@ HEADERS += \
     fdisk.h \
     main.h \
     mkdisk.h \
+    mkfs.h \
     parser.h \
     particion.h \
     scanner.h
