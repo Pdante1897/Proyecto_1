@@ -11,7 +11,13 @@
 #include "Node.h"
 #include "main.h"
 #include "disk.h"
-
+#define ANSI_COLOR_RED     "\x1b[31m"
+#define ANSI_COLOR_GREEN   "\x1b[32m"
+#define ANSI_COLOR_YELLOW  "\x1b[33m"
+#define ANSI_COLOR_BLUE    "\x1b[34m"
+#define ANSI_COLOR_MAGENTA "\x1b[35m"
+#define ANSI_COLOR_CYAN    "\x1b[36m"
+#define ANSI_COLOR_RESET   "\x1b[0m"
 using namespace std;
 
 enum choice{
@@ -44,19 +50,17 @@ bool makeDisk(QString direccion, int tam , MBR mbr){
     if((archivo = fopen(dir.c_str(),"wb")))
         fclose(archivo);
     else
-        cout << "Error al crear el archivo Binario" << endl;
+        printf(ANSI_COLOR_CYAN "Error al crear el archivo Binario" ANSI_COLOR_RESET);
     string comand = "dd if=/dev/zero of=\""+direccion.toStdString()+"\" bs=1024 count="+to_string(tam);
     system(comand.c_str());
     archivo = fopen(direccion.toStdString().c_str(), "rb+");
     if (archivo==NULL){
-        printf("no jalo");
         return false;
     }
     fseek(archivo,0,SEEK_SET);
     fwrite(&mbr,sizeof(MBR),1, archivo);
     fflush(archivo);
     fclose(archivo);
-    printf("si jalo");
     return true;
 }
 //para validar si los parametros son correctos y no se repiten
@@ -86,11 +90,11 @@ bool validarMkDisk(Node *Raiz){
                     fit = "W";
                 }
                 disco.fit=fit.toStdString().at(0);
-                printf("~~~>tipo de ajuste = %c\n",disco.fit);
+                printf(ANSI_COLOR_RED"~~~>tipo de ajuste = %c\n" ANSI_COLOR_RESET,disco.fit);
                 banderaFit=false;
             }else{
                 banderaDisk=true;
-                printf("Error! Ya fue definido el parametro -FIT \n");
+                printf(ANSI_COLOR_CYAN"Error! Ya fue definido el parametro -FIT \n" ANSI_COLOR_RESET);
                 return !banderaDisk;
 
             }
@@ -107,13 +111,13 @@ bool validarMkDisk(Node *Raiz){
                     unit = 'm';
                     disco.unit=unit[0];
                 }else{
-                    printf("ERROR: Valor del parametro -UNIT desconocido ");
+                    printf(ANSI_COLOR_CYAN"ERROR: Valor del parametro -UNIT desconocido \n" ANSI_COLOR_RESET);
                     banderaDisk = true;
                     return !banderaDisk;
                 }
             }else{
                 banderaDisk=true;
-                printf("Error! Ya fue definido el parametro -UNIT \n");
+                printf(ANSI_COLOR_CYAN"Error! Ya fue definido el parametro -UNIT \n" ANSI_COLOR_RESET);
                 return !banderaDisk;
             }
             break;
@@ -126,7 +130,7 @@ bool validarMkDisk(Node *Raiz){
                 break;
             }else{
                 banderaPath=true;
-                printf("Error! Ya fue definido el parametro -PATH \n");
+                printf(ANSI_COLOR_CYAN "Error! Ya fue definido el parametro -PATH \n" ANSI_COLOR_RESET);
             }
             break;
         }
@@ -138,11 +142,11 @@ bool validarMkDisk(Node *Raiz){
                 }
                 else{
                     banderaSize=true;
-                    printf("Error! El parametro -SIZE debe ser un numero mayor a 0 %i \n", disco.size);
+                    printf(ANSI_COLOR_CYAN "Error! El parametro -SIZE debe ser un numero mayor a 0 %i \n" ANSI_COLOR_RESET, disco.size);
                 }
             }else{
                 banderaSize=true;
-                printf("Error! Ya fue definido el parametro -SIZE \n");
+                printf(ANSI_COLOR_CYAN "Error! Ya fue definido el parametro -SIZE \n" ANSI_COLOR_RESET);
             }
             break;
         }//mkdisk -size~:~10 -path~:~/home/bryan/Escritorio/pruebadisco.disk
@@ -153,12 +157,12 @@ bool validarMkDisk(Node *Raiz){
     }
 
     }
-    if(!banderaSize){printf("~~~>Size todo bien \n");}
-    if(!banderaPath){printf("~~~>Path todo bien \n");}
-    if(!banderaFit){ printf("~~~>Fit  todo bien \n");}
+    if(!banderaSize){printf(ANSI_COLOR_RED "~~~>Size todo bien \n" ANSI_COLOR_RESET);}
+    if(!banderaPath){printf(ANSI_COLOR_RED "~~~>Path todo bien \n" ANSI_COLOR_RESET);}
+    if(!banderaFit){ printf(ANSI_COLOR_RED "~~~>Fit  todo bien \n" ANSI_COLOR_RESET);}
     else{disco.fit='F';}
     if(!banderaUnit){
-        printf("~~~>Unit todo bien \n");
+        printf(ANSI_COLOR_RED"~~~>Unit todo bien \n" ANSI_COLOR_RESET);
         if(disco.unit == 'm'){
             mbr.mbr_tamanio = disco.size*1048576;
             tamanioFinal = disco.size * 1024;
@@ -186,7 +190,7 @@ bool validarMkDisk(Node *Raiz){
         }
         verificarRuta(disco.path);
         makeDisk(disco.path,tamanioFinal,mbr);
-        printf("Disco %i Creado con Exito! \n",mbr.mbr_disk_signature);
+        printf(ANSI_COLOR_RED "Disco %i Creado con Exito! \n" ANSI_COLOR_RESET,mbr.mbr_disk_signature);
     }
     return !banderaDisk;
 
@@ -198,20 +202,20 @@ void ejecutarRMD(Node *Raiz){
     FILE *archivo;
     if((archivo=fopen(direccion.toStdString().c_str(),"r"))){
         string letra = "";
-        printf("~~~>¿Esta seguro que desea eliminar el disco? Y/N : \n" );
+        printf(ANSI_COLOR_RED"~~~>¿Esta seguro que desea eliminar el disco? Y/N : \n" ANSI_COLOR_RESET );
         printf("~");
         getline(cin,letra);
         if(letra.compare("Y") == 0 || letra.compare("y") == 0){
             string comando = "rm \""+direccion.toStdString()+"\"";
             system(comando.c_str());
-            printf("El disco  fue eliminado con exito! \n \n");
+            printf(ANSI_COLOR_RED"El disco  fue eliminado con exito! \n \n" ANSI_COLOR_RESET);
         }else if(letra.compare("N") || letra.compare("n") == 0){
-            printf("Se ha cancelado la accion \n");
+            printf(ANSI_COLOR_RED"Se ha cancelado la accion \n" ANSI_COLOR_RESET);
         }else{
-            printf("Letra ingresada incorrecta \n");
+            printf(ANSI_COLOR_CYAN"Letra ingresada incorrecta \n" ANSI_COLOR_RESET);
         }
         fclose(archivo);
     }else{
-        printf("Error: No existe el archivo que desea eliminar \n");
+        printf(ANSI_COLOR_CYAN "Error: No existe el archivo que desea eliminar \n" ANSI_COLOR_RESET);
     }
 }

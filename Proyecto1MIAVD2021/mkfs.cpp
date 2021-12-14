@@ -1,5 +1,11 @@
 #include "mkfs.h"
-
+#define ANSI_COLOR_RED     "\x1b[31m"
+#define ANSI_COLOR_GREEN   "\x1b[32m"
+#define ANSI_COLOR_YELLOW  "\x1b[33m"
+#define ANSI_COLOR_BLUE    "\x1b[34m"
+#define ANSI_COLOR_MAGENTA "\x1b[35m"
+#define ANSI_COLOR_CYAN    "\x1b[36m"
+#define ANSI_COLOR_RESET   "\x1b[0m"
 
 using namespace std;
 extern QList<ParticionMount> partMontadas;
@@ -37,7 +43,7 @@ void validarMKFS(Node *Raiz){
                 banderaID = false;
                 id = nodito.valor;
             }else{
-                printf("Error! Ya fue definido el parametro -ID \n");
+                printf(ANSI_COLOR_CYAN"Error! Ya fue definido el parametro -ID \n");
                 bandera = false;
                 break;
             }
@@ -50,7 +56,7 @@ void validarMKFS(Node *Raiz){
                 banderaType = false;
                 type = nodito.valor;
             }else{
-                printf("Error! Ya fue definido el parametro -TYPE \n");
+                printf(ANSI_COLOR_CYAN"Error! Ya fue definido el parametro -TYPE \n");
                 bandera = false;
                 break;
             }
@@ -62,7 +68,7 @@ void validarMKFS(Node *Raiz){
             if(banderaFs){
 
             }else{
-                printf("Error! Ya fue definido el parametro -FS \n");
+                printf(ANSI_COLOR_CYAN"Error! Ya fue definido el parametro -FS \n");
                 bandera = false;
                 break;
             }
@@ -155,9 +161,9 @@ void validarMKFS(Node *Raiz){
 
                 }
             }else
-                printf("ERROR: No se ha encontrado ninguna particion montada con el id ingresado \n");
+                printf(ANSI_COLOR_CYAN"ERROR: No se ha encontrado ninguna particion montada con el id ingresado \n");
         }else
-            printf("ERROR: El parametro ID no fue definido \n");
+            printf(ANSI_COLOR_CYAN"ERROR: El parametro ID no fue definido \n");
     }
 }
 
@@ -270,8 +276,8 @@ void MKFSExt2(int inicio, int tamanio, QString dir){
         strcpy(archivo.b_content,"1,G,root\n1,U,root,root,123\n");
         fseek(archivote,superB.s_block_start + static_cast<int>(sizeof(BloqueCarpeta)),SEEK_SET);
         fwrite(&archivo,sizeof(BloqueDeArchivos),1,archivote);
-        printf("~~~>Formato Ext2 \n");
-        printf("~~~>Disco formateado con exito! \n");
+        printf(ANSI_COLOR_RED"~~~>Formato Ext2 \n");
+        printf(ANSI_COLOR_RED"~~~>Disco formateado con exito! \n");
         fclose(archivote);
 }
 
@@ -376,7 +382,8 @@ void MKFSExt3(int inicio, int tamanio, QString direccion){
     strcpy(archivo.b_content,"1,G,root\n1,U,root,root,123\n");
     fseek(archivote,superB.s_block_start + static_cast<int>(sizeof(BloqueCarpeta)),SEEK_SET);
     fwrite(&archivo,sizeof(BloqueDeArchivos),1,archivote);
-
+    printf(ANSI_COLOR_RED"~~~>Formato Ext3 \n");
+    printf(ANSI_COLOR_RED"~~~>Disco formateado con exito! \n");
     fclose(archivote);
 }
 

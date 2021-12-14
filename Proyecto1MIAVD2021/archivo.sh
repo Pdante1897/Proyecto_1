@@ -65,4 +65,3 @@ pause
 mkfs -type~:~fast -id~:~vda2 -fs~:~3fs
 pause
 
-exec -path~:~/home/bryan/Escritorio/Proyecto_1/Proyecto1MIAVD2021/archivo.sh

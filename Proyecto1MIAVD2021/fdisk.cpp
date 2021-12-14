@@ -15,7 +15,13 @@
 #include "disk.h"
 #include "main.h"
 #include "clases.h"
-
+#define ANSI_COLOR_RED     "\x1b[31m"
+#define ANSI_COLOR_GREEN   "\x1b[32m"
+#define ANSI_COLOR_YELLOW  "\x1b[33m"
+#define ANSI_COLOR_BLUE    "\x1b[34m"
+#define ANSI_COLOR_MAGENTA "\x1b[35m"
+#define ANSI_COLOR_CYAN    "\x1b[36m"
+#define ANSI_COLOR_RESET   "\x1b[0m"
 using namespace std;
 extern QList<ParticionMount> partMontadas;
 extern QList<QString> pathsMontados;
@@ -70,11 +76,11 @@ bool validarFDk(Node *Raiz){
                     fit = "W";
                 }
                 valorFit=fit.toStdString().at(0);
-                printf("~~~>tipo de ajuste = %s\n",fit.toStdString().c_str());
-                printf("~~~>tipo de ajuste = %c\n",valorFit);
+                printf(ANSI_COLOR_RED"~~~>tipo de ajuste = %s\n" ANSI_COLOR_RESET,fit.toStdString().c_str());
+                printf(ANSI_COLOR_RED"~~~>tipo de ajuste = %c\n" ANSI_COLOR_RESET,valorFit);
                 banderaFit=false;
             }else{
-                printf("Error! Ya fue definido el parametro -FIT \n");
+                printf(ANSI_COLOR_CYAN "Error! Ya fue definido el parametro -FIT \n" ANSI_COLOR_CYAN);
                 return !banderaFDisk;
 
             }
@@ -94,12 +100,12 @@ bool validarFDk(Node *Raiz){
                     unit = 'b';
                     valorUnit=unit[0];
                 }else{
-                    printf("ERROR: Valor del parametro -UNIT desconocido ");
+                    printf(ANSI_COLOR_CYAN "ERROR: Valor del parametro -UNIT desconocido " ANSI_COLOR_RESET);
                     banderaFDisk = true;
                     return !banderaFDisk;
                 }
             }else{
-                printf("Error! Ya fue definido el parametro -UNIT \n");
+                printf(ANSI_COLOR_CYAN "Error! Ya fue definido el parametro -UNIT \n" ANSI_COLOR_RESET);
                 return !banderaFDisk;
             }
             break;
@@ -111,7 +117,7 @@ bool validarFDk(Node *Raiz){
                 banderaPath=false;
                 break;
             }else{
-                printf("Error! Ya fue definido el parametro -PATH \n");
+                printf(ANSI_COLOR_CYAN "Error! Ya fue definido el parametro -PATH \n" ANSI_COLOR_RESET);
                 return !banderaFDisk;
             }
             break;
@@ -124,12 +130,12 @@ bool validarFDk(Node *Raiz){
                     banderaSize=false;
                 }
                 else{
-                    printf("Error! El parametro -SIZE debe ser un numero mayor a 0 \n");
+                    printf(ANSI_COLOR_CYAN "Error! El parametro -SIZE debe ser un numero mayor a 0 \n" ANSI_COLOR_RESET);
                     return !banderaFDisk;
                 }
             }else{
                 banderaSize=true;
-                printf("Error! Ya fue definido el parametro -SIZE \n");
+                printf(ANSI_COLOR_CYAN "Error! Ya fue definido el parametro -SIZE \n" ANSI_COLOR_RESET);
                 return !banderaFDisk;
 
             }
@@ -142,7 +148,7 @@ bool validarFDk(Node *Raiz){
                 valorAdd=nodito.valor.toInt();
                 break;
             }else{
-                printf("Error! Ya fue definido el parametro -ADD \n");
+                printf(ANSI_COLOR_CYAN "Error! Ya fue definido el parametro -ADD \n" ANSI_COLOR_RESET);
                 return !banderaFDisk;
 
             }
@@ -160,12 +166,12 @@ bool validarFDk(Node *Raiz){
                 }else if(valorType == 'L' || valorType == 'l'){
                     valorType = 'L';
                 }else{
-                    printf("Error! El valor del parametro TYPE no fue reconocido \n");
+                    printf(ANSI_COLOR_CYAN "Error! El valor del parametro TYPE no fue reconocido \n" ANSI_COLOR_RESET);
                     banderaFDisk = true;
                     break;
                 }
             }else{
-                printf("Error! Ya fue definido el parametro -TYPE \n");
+                printf(ANSI_COLOR_CYAN"Error! Ya fue definido el parametro -TYPE \n" ANSI_COLOR_RESET);
                 return !banderaFDisk;
             }
             break;
@@ -176,7 +182,7 @@ bool validarFDk(Node *Raiz){
                 banderaDelete=false;
                 valorDel=nodito.valor;
             }else{
-                printf("Error! Ya fue definido el parametro -DELETE \n");
+                printf(ANSI_COLOR_CYAN "Error! Ya fue definido el parametro -DELETE \n" ANSI_COLOR_RESET);
                 return !banderaFDisk;
 
             }
@@ -189,7 +195,7 @@ bool validarFDk(Node *Raiz){
                 banderaName=false;
                 break;
             }else{
-                printf("Error! Ya fue definido el parametro -NAME \n");
+                printf(ANSI_COLOR_CYAN "Error! Ya fue definido el parametro -NAME \n" ANSI_COLOR_RESET);
                 return !banderaFDisk;
             }
             break;
@@ -200,16 +206,16 @@ bool validarFDk(Node *Raiz){
     }
 
     }
-    if(!banderaAdd){printf("~~~>Add todo bien \n");}
-    if(!banderaDelete){printf("~~~>Delete todo bien \n");}
-    if(!banderaType){ printf("~~~>Type  todo bien \n");}
-    if(!banderaName){ printf("~~~>Name  todo bien \n");}
-    if(!banderaSize){printf("~~~>Size todo bien \n");}
-    if(!banderaPath){printf("~~~>Path todo bien \n");}
-    if(!banderaFit){ printf("~~~>Fit  todo bien \n");}
+    if(!banderaAdd){printf(ANSI_COLOR_RED"~~~>Add todo bien \n");}
+    if(!banderaDelete){printf(ANSI_COLOR_RED"~~~>Delete todo bien \n");}
+    if(!banderaType){ printf(ANSI_COLOR_RED"~~~>Type  todo bien \n");}
+    if(!banderaName){ printf(ANSI_COLOR_RED"~~~>Name  todo bien \n");}
+    if(!banderaSize){printf(ANSI_COLOR_RED"~~~>Size todo bien \n");}
+    if(!banderaPath){printf(ANSI_COLOR_RED"~~~>Path todo bien \n");}
+    if(!banderaFit){ printf(ANSI_COLOR_RED"~~~>Fit  todo bien \n");}
     else{valorFit='W';}
     if(!banderaUnit){
-        printf("~~~>Unit todo bien \n");
+        printf(ANSI_COLOR_RED"~~~>Unit todo bien \n");
         if(valorUnit == 'm'){
             valorSize= valorSize*1048576;
             tamanioFinal = valorSize;
@@ -247,7 +253,7 @@ bool validarFDk(Node *Raiz){
             }
         }
         if(!montado){addParticion(valorPath,valorName, valorAdd, valorUnit);}
-        else{printf("Error! La particion esta montada! Debe desmontarla antes de usar el comando -ADD \n");}
+        else{printf(ANSI_COLOR_CYAN"Error! La particion esta montada! Debe desmontarla antes de usar el comando -ADD \n");}
 
 
 
@@ -262,7 +268,7 @@ bool validarFDk(Node *Raiz){
     } if(!montado){
             delParticion(valorPath, valorName, valorDel);
         }
-        else{printf("Error! La particion esta montada! Debe desmontarla antes de usar el comando -DELETE \n");}
+        else{printf(ANSI_COLOR_CYAN"Error! La particion esta montada! Debe desmontarla antes de usar el comando -DELETE \n");}
 
     }
     return !banderaFDisk;
@@ -324,21 +330,21 @@ void addParticion(QString path, QString name, int valorAdd, char valorUnit){
                             mbr.mbr_partitions[indicePart].part_size=mbr.mbr_partitions[indicePart].part_size+valorAdd;
                             fseek(archivo,0,SEEK_SET);
                             fwrite(&mbr,sizeof(MBR),1,archivo);
-                            printf("~~~>Se agrego espacio a la particion exitosamente! \n");
+                            printf(ANSI_COLOR_RED"~~~>Se agrego espacio a la particion exitosamente! \n");
                         }else{
-                            printf("Error: No es posible agregar espacio a la particion ya que no hay suficiente espacio despues de ella. \n");
+                            printf(ANSI_COLOR_CYAN"Error: No es posible agregar espacio a la particion ya que no hay suficiente espacio despues de ella. \n");
 
                         }
                     }
 
                 }else{//restar
                     if(valorAdd >= mbr.mbr_partitions[indicePart].part_size){
-                        printf("Error: No se puede eliminar una cantidad mayor de espacio de la que tiene asignada la particion! \n");
+                        printf(ANSI_COLOR_CYAN"Error: No se puede eliminar una cantidad mayor de espacio de la que tiene asignada la particion! \n");
                     }else{
                         mbr.mbr_partitions[indicePart].part_size=mbr.mbr_partitions[indicePart].part_size-valorAdd;
                         fseek(archivo,0,SEEK_SET);
                         fwrite(&mbr,sizeof(MBR),1,archivo);
-                        printf("~~~>Se quito espacio a la particion exitosamente! \n");
+                        printf(ANSI_COLOR_RED"~~~>Se quito espacio a la particion exitosamente! \n");
                     }
                 }
             }else{//extendida
@@ -361,9 +367,9 @@ void addParticion(QString path, QString name, int valorAdd, char valorUnit){
                             mbr.mbr_partitions[indicePart].part_size=mbr.mbr_partitions[indicePart].part_size+valorAdd;
                             fseek(archivo,0,SEEK_SET);
                             fwrite(&mbr,sizeof(MBR),1,archivo);
-                            printf("~~~>Se agrego espacio a la particion exitosamente! \n");
+                            printf(ANSI_COLOR_RED"~~~>Se agrego espacio a la particion exitosamente! \n");
                         }else{
-                            printf("Error: No es posible agregar espacio a la particion ya que no hay suficiente espacio despues de ella. \n");
+                            printf(ANSI_COLOR_CYAN"Error: No es posible agregar espacio a la particion ya que no hay suficiente espacio despues de ella. \n");
 
                         }
                     }
@@ -383,10 +389,10 @@ void addParticion(QString path, QString name, int valorAdd, char valorUnit){
                             mbr.mbr_partitions[indicePart].part_size= mbr.mbr_partitions[indicePart].part_size + valorAdd;
                             fseek(archivo,0,SEEK_SET);
                             fwrite(&mbr,sizeof(MBR),1, archivo);
-                            printf("~~~>Se quito espacio a la particion exitosamente! \n");
+                            printf(ANSI_COLOR_RED"~~~>Se quito espacio a la particion exitosamente! \n");
                         }
                     }else{
-                        printf("Error: No se puede eliminar una cantidad mayor de espacio de la que tiene asignada la particion! \n");
+                        printf(ANSI_COLOR_CYAN"Error: No se puede eliminar una cantidad mayor de espacio de la que tiene asignada la particion! \n");
                     }
                 }
             }
@@ -411,13 +417,13 @@ void addParticion(QString path, QString name, int valorAdd, char valorUnit){
                                 ebr.part_size=ebr.part_size+valorAdd;
                                 fseek(archivo,ebr.part_start,SEEK_SET);
                                 fwrite(&ebr,sizeof(EBR),1, archivo);
-                                printf("~~~>Se agrego espacio a la particion exitosamente! \n");
+                                printf(ANSI_COLOR_RED"~~~>Se agrego espacio a la particion exitosamente! \n");
                             }else{
-                                printf("Error: No es posible agregar espacio a la particion ya que no hay suficiente espacio despues de ella. \n");
+                                printf(ANSI_COLOR_CYAN"Error: No es posible agregar espacio a la particion ya que no hay suficiente espacio despues de ella. \n");
 
                             }
                         }else{
-                            printf("Error: No es posible agregar espacio a la particion ya que no hay suficiente espacio despues de ella. \n");
+                            printf(ANSI_COLOR_CYAN"Error: No es posible agregar espacio a la particion ya que no hay suficiente espacio despues de ella. \n");
 
                         }
                     }else{//tiene una siguiente
@@ -429,13 +435,13 @@ void addParticion(QString path, QString name, int valorAdd, char valorUnit){
                                 ebr.part_size=ebr.part_size+valorAdd;
                                 fseek(archivo,ebr.part_start,SEEK_SET);
                                 fwrite(&ebr,sizeof(EBR),1, archivo);
-                                printf("~~~>Se agrego espacio a la particion exitosamente! \n");
+                                printf(ANSI_COLOR_RED"~~~>Se agrego espacio a la particion exitosamente! \n");
                             }else{
-                                printf("Error: No es posible agregar espacio a la particion ya que no hay suficiente espacio despues de ella. \n");
+                                printf(ANSI_COLOR_CYAN"Error: No es posible agregar espacio a la particion ya que no hay suficiente espacio despues de ella. \n");
 
                             }
                         }else{
-                            printf("Error: No es posible agregar espacio a la particion ya que no hay suficiente espacio despues de ella. \n");
+                            printf(ANSI_COLOR_CYAN"Error: No es posible agregar espacio a la particion ya que no hay suficiente espacio despues de ella. \n");
 
                         }
                     }
@@ -448,23 +454,23 @@ void addParticion(QString path, QString name, int valorAdd, char valorUnit){
                         fread(&ebr,sizeof(EBR),1,archivo);
                     }
                     if(-1*valorAdd >= ebr.part_size){
-                        printf("Error: No se puede eliminar una cantidad mayor de espacio de la que tiene asignada la particion! \n");
+                        printf(ANSI_COLOR_CYAN"Error: No se puede eliminar una cantidad mayor de espacio de la que tiene asignada la particion! \n");
                     }else{
                         ebr.part_size = ebr.part_size + valorAdd;
                         fseek(archivo,ebr.part_start,SEEK_SET);
                         fwrite(&ebr,sizeof(EBR),1,archivo);
-                        printf("~~~>Se quito espacio a la particion exitosamente! \n");
+                        printf(ANSI_COLOR_RED"~~~>Se quito espacio a la particion exitosamente! \n");
                     }
                 }
 
             }else{
-                printf("Error: No se puede encontrar la Particion Extendida que contiene la Particion Logica deseada! \n");
+                printf(ANSI_COLOR_CYAN"Error: No se puede encontrar la Particion Extendida que contiene la Particion Logica deseada! \n");
 
             }
         }
         fclose(archivo);
     }else{
-        printf("ERROR el disco donde se desea agregar/quitar unidades no existe \n");
+        printf(ANSI_COLOR_CYAN"ERROR el disco donde se desea agregar/quitar unidades no existe \n");
     }
 }
 void delParticion(QString direccion, QString name, QString valorType){
@@ -496,7 +502,7 @@ void delParticion(QString direccion, QString name, QString valorType){
                 partExtendida=true;
             }
         }
-        printf("~~~>¿Esta seguro que desea eliminar la particion? Y/N : ");
+        printf(ANSI_COLOR_RED"~~~>¿Esta seguro que desea eliminar la particion? Y/N : ");
         getline(cin, letra);
         if(letra.compare("Y") == 0 || letra.compare("y") == 0){
             if(part){//principal
@@ -514,7 +520,7 @@ void delParticion(QString direccion, QString name, QString valorType){
                         fseek(archivo,0,SEEK_SET);
                         fwrite(&mbr,sizeof(MBR),1,archivo);
                     }
-                    printf("~~~>La particion primaria fue eliminada con exito \n");
+                    printf(ANSI_COLOR_RED"~~~>La particion primaria fue eliminada con exito \n");
 
                 }else{//ext
                     if(valorType == "full"){
@@ -533,7 +539,7 @@ void delParticion(QString direccion, QString name, QString valorType){
                         fwrite(&mbr,sizeof(MBR),1,archivo);
 
                     }
-                    printf("~~~>La particion extendida fue eliminada con exito \n");
+                    printf(ANSI_COLOR_RED"~~~>La particion extendida fue eliminada con exito \n");
 
                 }
             }else{//
@@ -566,25 +572,25 @@ void delParticion(QString direccion, QString name, QString valorType){
                             fseek(archivo, ftell(archivo)-sizeof(EBR),SEEK_SET);
                             fwrite(&erb,sizeof(EBR),1,archivo);
                         }
-                        printf("~~~>La particion logica fue eliminada con exito \n");
+                        printf(ANSI_COLOR_RED"~~~>La particion logica fue eliminada con exito \n");
 
                     }else{
-                        printf("ERROR: no se encuentra la particion que desea eliminar \n");
+                        printf(ANSI_COLOR_CYAN"ERROR: no se encuentra la particion que desea eliminar \n");
 
                     }
                 }else{
-                    printf("ERROR: no se encuentra la particion que desea eliminar \n");
+                    printf(ANSI_COLOR_CYAN"ERROR: no se encuentra la particion que desea eliminar \n");
                 }
             }
         }else if(letra.compare("N") || letra.compare("n") == 0){
-            printf("~~Operacion Cancelada \n");
+            printf(ANSI_COLOR_RED"~~Operacion Cancelada \n");
         }else{
-            printf("~~Letra ingresada incorrecta \n");
+            printf(ANSI_COLOR_RED"~~Letra ingresada incorrecta \n");
         }
 
         fclose(archivo);
     }else{
-        printf("ERROR: el disco que contiene la particion especificada no existe \n");
+        printf(ANSI_COLOR_CYAN"ERROR: el disco que contiene la particion especificada no existe \n");
     }
 }
 void crearPartPri(QString direccion, QString name, int size, char fit){
@@ -650,8 +656,8 @@ void crearPartPri(QString direccion, QString name, int size, char fit){
                     utilizado += mbr.mbr_partitions[i].part_size;
                 }
             }
-            printf("~~~>Espacio necesario:  %i Bytes \n",sizeBytes);
-            printf("~~~>Espacio disponible:  %i Bytes \n",mbr.mbr_tamanio - utilizado);
+            printf(ANSI_COLOR_RED"~~~>Espacio necesario:  %i Bytes \n",sizeBytes);
+            printf(ANSI_COLOR_RED"~~~>Espacio disponible:  %i Bytes \n",mbr.mbr_tamanio - utilizado);
             if((mbr.mbr_tamanio - utilizado) >= sizeBytes){
                 if(!existe){
                     if(mbr.mbr_disk_fit == 'B'){
@@ -717,23 +723,23 @@ void crearPartPri(QString direccion, QString name, int size, char fit){
                         fwrite(&buff,1,1,archivo);
                     }
 
-                    printf("~~~>La particion primaria fue creada con exito \n");
+                    printf(ANSI_COLOR_RED"~~~>La particion primaria fue creada con exito \n");
                 }else{
-                    printf("ERROR: Ya existe una particion con el mismo nombre \n");
+                    printf(ANSI_COLOR_CYAN"ERROR: Ya existe una particion con el mismo nombre \n");
 
                 }
 
             }else{
-                printf("ERROR: La particion que desea crear excede el espacio libre \n");
+                printf(ANSI_COLOR_CYAN"ERROR: La particion que desea crear excede el espacio libre \n");
 
             }
         }else{
-            printf("ERROR: Ya se llego al limite de particiones (4 particiones por Disco) \n");
-            printf("Para crear una nueva debera eliminar al menos una. \n");
+            printf(ANSI_COLOR_CYAN"ERROR: Ya se llego al limite de particiones (4 particiones por Disco) \n");
+            printf(ANSI_COLOR_CYAN"Para crear una nueva debera eliminar al menos una. \n");
         }
         fclose(archivo);
     }else{
-        printf("ERROR: no existe el Disco especificado \n");
+        printf(ANSI_COLOR_CYAN"ERROR: no existe el Disco especificado \n");
 
     }
 
@@ -806,8 +812,8 @@ void crearPartExt(QString direccion, QString name, int size, char fit){
                     utilizado += mbr.mbr_partitions[i].part_size;
                 }
             }
-            printf("~~~>Espacio necesario:  %i Bytes \n",sizeBytes);
-            printf("~~~>Espacio disponible:  %i Bytes \n",mbr.mbr_tamanio - utilizado);
+            printf(ANSI_COLOR_RED"~~~>Espacio necesario:  %i Bytes \n",sizeBytes);
+            printf(ANSI_COLOR_RED"~~~>Espacio disponible:  %i Bytes \n",mbr.mbr_tamanio - utilizado);
             if((mbr.mbr_tamanio - utilizado) >= sizeBytes){
                 if(!partext){
                     if(mbr.mbr_disk_fit == 'B'){
@@ -897,23 +903,23 @@ void crearPartExt(QString direccion, QString name, int size, char fit){
                     for(int i = 0; i < (size - (int)sizeof(EBR)); i++){
                         fwrite(&unos,1,1,archivo);
                     }
-                    printf("~~~>La particion Extendida fue creada con exito \n");
+                    printf(ANSI_COLOR_RED"~~~>La particion Extendida fue creada con exito \n");
                 }else{
-                    printf("ERROR: Ya existe una particion con el mismo nombre o una particion Extendida \n");
+                    printf(ANSI_COLOR_CYAN"ERROR: Ya existe una particion con el mismo nombre o una particion Extendida \n");
 
                 }
 
             }else{
-                printf("ERROR: La particion que desea crear excede el espacio libre \n");
+                printf(ANSI_COLOR_CYAN"ERROR: La particion que desea crear excede el espacio libre \n");
 
             }
         }else{
-            printf("ERROR: Ya se llego al limite de particiones (4 particiones por Disco) \n");
-            printf("Para crear una nueva debera eliminar al menos una. \n");
+            printf(ANSI_COLOR_CYAN"ERROR: Ya se llego al limite de particiones (4 particiones por Disco) \n");
+            printf(ANSI_COLOR_CYAN"Para crear una nueva debera eliminar al menos una. \n");
         }
     fclose(archivo);
     }else{
-        printf("ERROR: no existe el Disco especificado \n");
+        printf(ANSI_COLOR_CYAN"ERROR: no existe el Disco especificado \n");
 
     }
 }
@@ -980,7 +986,7 @@ void crearLogica(QString direccion, QString name, int size, char fit){
                     utilizado += mbr.mbr_partitions[i].part_size;
                 }
             }
-            printf("~~~>Espacio necesario:  %i Bytes \n",sizeBytes);
+            printf(ANSI_COLOR_RED"~~~>Espacio necesario:  %i Bytes \n",sizeBytes);
             //printf("~~~>Espacio disponible:  %i Bytes \n",mbr.mbr_tamanio - utilizado);
             if((mbr.mbr_tamanio - utilizado) >= sizeBytes){
                 if(!existe){
@@ -997,9 +1003,9 @@ void crearLogica(QString direccion, QString name, int size, char fit){
                             strcpy(ebr.part_name, name.toStdString().c_str());
                             fseek(archivo, mbr.mbr_partitions[numPart].part_start ,SEEK_SET);
                             fwrite(&ebr,sizeof(EBR),1,archivo);
-                            printf("La particion logica fue creada con exito \n");
+                            printf(ANSI_COLOR_RED"La particion logica fue creada con exito \n");
                         }else{
-                            printf("ERROR la particion logica a crear excede el espacio disponible de la particion extendida \n");
+                            printf(ANSI_COLOR_CYAN"ERROR la particion logica a crear excede el espacio disponible de la particion extendida \n");
                         }
                     }else{
 
@@ -1020,26 +1026,26 @@ void crearLogica(QString direccion, QString name, int size, char fit){
                             ebr.part_next = -1;
                             strcpy(ebr.part_name,name.toStdString().c_str());
                             fwrite(&ebr,sizeof(EBR),1,archivo);
-                            printf("La particion logica fue creada con exito \n");
+                            printf(ANSI_COLOR_RED"~~~>La particion logica fue creada con exito \n");
                         }
 
                     }
                 }else{
-                    printf("ERROR: la particion logica que desea crear excede el \n");
-                    printf("espacio disponible de la particion extendida utilizada. \n");
+                    printf(ANSI_COLOR_CYAN"ERROR: la particion logica que desea crear excede el \n");
+                    printf(ANSI_COLOR_CYAN"espacio disponible de la particion extendida utilizada. \n");
 
                 }
 
             }else{
-                printf("ERROR: Es necesaria una particion extendida para guardar la particion logica \n");
+                printf(ANSI_COLOR_CYAN"ERROR: Es necesaria una particion extendida para guardar la particion logica \n");
 
             }
         }else{
-            printf("ERROR: Ya existe una particion con el mismo nombre \n");
+            printf(ANSI_COLOR_CYAN"ERROR: Ya existe una particion con el mismo nombre \n");
         }
     fclose(archivo);
     }else{
-        printf("ERROR: no existe el Disco especificado \n");
+        printf(ANSI_COLOR_CYAN"ERROR: no existe el Disco especificado \n");
 
     }
 }
@@ -1090,7 +1096,7 @@ bool validarMontaje(Node *Raiz){
                 banderaPath=false;
                 break;
             }else{
-                printf("Error! Ya fue definido el parametro -PATH \n");
+                printf(ANSI_COLOR_CYAN"Error! Ya fue definido el parametro -PATH \n");
                 return !banderaMount;
             }
             break;
@@ -1102,7 +1108,7 @@ bool validarMontaje(Node *Raiz){
                 banderaName=false;
                 break;
             }else{
-                printf("Error! Ya fue definido el parametro -NAME \n");
+                printf(ANSI_COLOR_CYAN"Error! Ya fue definido el parametro -NAME \n");
                 return !banderaMount;
             }
             break;
@@ -1170,7 +1176,7 @@ bool validarMontaje(Node *Raiz){
                         int letra = Letra(valorPath);
                         int num = Numero(valorPath,valorName);
                         if(num == -1){
-                            printf("ERROR la particion ya esta montada \n");
+                            printf(ANSI_COLOR_CYAN"ERROR la particion ya esta montada \n");
                         }else{
                             char auxL = static_cast<char>(letra);
                             string id="vd";
@@ -1181,11 +1187,11 @@ bool validarMontaje(Node *Raiz){
                             }
                             partMontadas.append(*noditoM);
 
-                            printf("Particion montada con exito \n");
+                            printf(ANSI_COLOR_RED"Particion montada con exito \n");
                             mostList();
                         }
                     }else{
-                        printf("ERROR: No se encuentra el disco \n");
+                        printf(ANSI_COLOR_CYAN"ERROR: No se encuentra el disco \n");
 
                     }
                 }else{//Posiblemente logica
@@ -1202,7 +1208,7 @@ bool validarMontaje(Node *Raiz){
 
                             int letra = Letra(valorPath);
                             if(letra == -1){
-                                printf("ERROR: la particion ya esta montada \n");
+                                printf(ANSI_COLOR_CYAN"ERROR: la particion ya esta montada \n");
 
                             }else{
                                 int num = Numero(valorPath,valorName);
@@ -1214,25 +1220,25 @@ bool validarMontaje(Node *Raiz){
                                 if(!pathsMontados.contains(valorPath)){
                                     pathsMontados.append(valorPath);
                                 }
-                                printf("La Particion fue montada con exito \n");
+                                printf(ANSI_COLOR_RED"La Particion fue montada con exito \n");
 
                                 mostList();
                             }
                         }else{
-                            printf("ERROR: No se encuentra el disco \n");
+                            printf(ANSI_COLOR_CYAN"ERROR: No se encuentra el disco \n");
 
                         }
                     }else{
-                        printf("ERROR: No se encuentra la particion a montar \n");
+                        printf(ANSI_COLOR_CYAN"ERROR: No se encuentra la particion a montar \n");
 
                     }
                 }
             }else{
-                printf("ERROR: Parametro Name no definido \n");
+                printf(ANSI_COLOR_CYAN"ERROR: Parametro Name no definido \n");
 
             }
         }else{
-            printf("ERROR: Parametro PATH no definido \n");
+            printf(ANSI_COLOR_CYAN"ERROR: Parametro PATH no definido \n");
         }
     }
 }
@@ -1242,7 +1248,7 @@ void montarParticion(Node *Raiz){
 }
 
 void mostList(){
-    printf("--------------------------------------------------------------------------------\n");
+    printf(ANSI_COLOR_MAGENTA"--------------------------------------------------------------------------------\n");
     printf("|                        Particiones montadas                                  |\n");
     printf("--------------------------------------------------------------------------------\n");
     printf("| Path                      | Nombre                        | ID               |\n");

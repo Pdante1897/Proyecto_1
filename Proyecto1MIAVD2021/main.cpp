@@ -14,6 +14,13 @@
 #include "fdisk.h"
 #include "clases.h"
 #include "mkfs.h"
+#define ANSI_COLOR_RED     "\x1b[31m"
+#define ANSI_COLOR_GREEN   "\x1b[32m"
+#define ANSI_COLOR_YELLOW  "\x1b[33m"
+#define ANSI_COLOR_BLUE    "\x1b[34m"
+#define ANSI_COLOR_MAGENTA "\x1b[35m"
+#define ANSI_COLOR_CYAN    "\x1b[36m"
+#define ANSI_COLOR_RESET   "\x1b[0m"
 
 using namespace std;
 
@@ -53,12 +60,12 @@ int main()
     char encabezado[] = "------------------------------SISTEMA DE ARCHIVOS-----------------------------\n"
              "By: Bryan Gerardo Paez Morales_______________________________________201700945\n"
              "Ingrese un comando: \n";
-    printf("%s",encabezado);
+    printf(ANSI_COLOR_RED "%s" ANSI_COLOR_RESET,encabezado );
     char lcomando[399];
     string exit = "exit";
     QTextStream qtin(stdin);
     while(true){
-        printf("~");
+        printf(ANSI_COLOR_GREEN "~" );
         fgets(lcomando,sizeof (lcomando),stdin);
         if (comExit(lcomando)){
             break;
@@ -85,7 +92,7 @@ void leerLComando(char lcomando[399]){
                 ejecutarComando(*listNodos);
             }
         }else
-            printf("Error: Comando no valido \n \n");
+            printf(ANSI_COLOR_CYAN"Error: Comando no valido \n \n" ANSI_COLOR_RESET);
     }
 }
 
@@ -97,7 +104,7 @@ void ejecutarComando(Node Lista){
     case MKD:{
         Node nodito = nodo.hijos.at(0);
         if(validarMkDisk(&nodito)){
-            printf("Comando reconocido correctamente. \n \n");
+            printf(ANSI_COLOR_RED"Comando reconocido correctamente. \n \n");
         }
         break;
     }
@@ -109,7 +116,7 @@ void ejecutarComando(Node Lista){
     case FDK:{
         Node nodito = nodo.hijos.at(0);
         if(validarFDk(&nodito)){
-            printf("Comando reconocido correctamente. \n \n");
+            printf(ANSI_COLOR_RED"Comando reconocido correctamente. \n \n");
         };
         break;
     }case MOUNT:{
@@ -117,7 +124,7 @@ void ejecutarComando(Node Lista){
         validarMontaje(&nodito);
         break;
     }case PAUSE:{
-        printf("~~~>Sistema en pausa! -Presione una tecla para continuar... ");
+        printf(ANSI_COLOR_YELLOW"~~~>Sistema en pausa! -Presione una tecla para continuar... ");
         std::cin.get();
         break;
 
@@ -129,14 +136,14 @@ void ejecutarComando(Node Lista){
             memset(line,0,sizeof(line));
             while(fgets(line,sizeof line,archivo)){
                 if(line[0]!='\n'){
-                    printf("~ %s",line);
+                    printf(ANSI_COLOR_GREEN"~ %s",line);
                     leerLComando(line);
                 }
                 memset(line,0,sizeof(line));
             }
             fclose(archivo);
         }else{
-            printf("ERROR: script no encontrado\n");
+            printf(ANSI_COLOR_CYAN"ERROR: script no encontrado\n");
         }break;
     }case UMOUNT:{
         QString id = listNodos->hijos.at(0).valor;
@@ -144,13 +151,13 @@ void ejecutarComando(Node Lista){
         for(int i=0; i<partMontadas.length();i++){
             if(partMontadas.at(i).id==id){
                 partMontadas.removeAt(i);
-                printf("La unidad fue desmontada con exito! \n");
+                printf(ANSI_COLOR_RED"La unidad fue desmontada con exito! \n");
                 eliminado = true;
                 break;
             }
 
         }
-        if(!eliminado){printf("ERROR: no se encuentra montada la unidad \n");}
+        if(!eliminado){printf(ANSI_COLOR_CYAN"ERROR: no se encuentra montada la unidad \n");}
         break;
     }case MKFS:{
         Node nodito = nodo.hijos.at(0);
