@@ -47,6 +47,7 @@ mount -path~:~/home/archivos/fase2/Disco1.disk -name~:~Part2
 mount -path~:~/home/archivos/fase2/Disco1.disk -name~:~Part3 
 pause
 mount -path~:~/home/archivos/fase2/Disco1.disk -name~:~Part4L 
+
 mount -path~:~/home/archivos/fase2/Disco2.disk -name~:~Part1_D2 
 pause
 mount -path~:~/home/archivos/fase2/Disco2.disk -name~:~Part2_D2 
@@ -65,3 +66,8 @@ pause
 mkfs -type~:~fast -id~:~vda2 -fs~:~3fs
 pause
 
+rep -id~:~vda1 -path~:~/home/bryan/Escritorio/REPORTE.png -name~:~MBR
+rep -id~:~vda1 -path~:~/home/bryan/Escritorio/REPORTEDisk.png -name~:~disk
+
+
+exec -path~:~/home/bryan/Escritorio/Proyecto_1/Proyecto1MIAVD2021/archivo.sh

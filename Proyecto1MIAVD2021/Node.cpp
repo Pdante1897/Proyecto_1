@@ -32,5 +32,5 @@ void Node::asignarTipo(){
 
 }
 void Node::agregar(Node nodo){
-    hijos.append(nodo);
+    hijitos.append(nodo);
 }

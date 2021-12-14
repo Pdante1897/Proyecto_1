@@ -1159,7 +1159,7 @@ YY_RULE_SETUP
 case 25:
 YY_RULE_SETUP
 #line 60 "lexico.l"
-{ return disk; }
+{ return repDisk; }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP

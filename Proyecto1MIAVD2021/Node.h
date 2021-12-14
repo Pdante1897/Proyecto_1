@@ -12,7 +12,7 @@ public:
     int tipo;
     QString valor;
     void asignarTipo();
-    QList<Node> hijos;
+    QList<Node> hijitos;
     void agregar(Node nodo);
 };
 

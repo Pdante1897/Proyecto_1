@@ -155,7 +155,7 @@ extern int yydebug;
     fast = 278,
     full = 279,
     mbr = 280,
-    disk = 281,
+    repDisk = 281,
     igual = 282,
     extension = 283,
     num = 284,

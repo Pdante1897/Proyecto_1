@@ -49,7 +49,7 @@ bool validarFDk(Node *Raiz){
     bool primerAdd=false;
     bool primerSize=false;
     bool primerDelete=false;
-    int numNodos = Raiz->hijos.length();
+    int numNodos = Raiz->hijitos.length();
     MBR mbr;
     int valorSize=0;
     int valorAdd=0;
@@ -62,12 +62,12 @@ bool validarFDk(Node *Raiz){
     QString valorDel;
     for(int i=0; i<numNodos;++i)
     {
-        Node nodito = Raiz->hijos.at(i);
+        Node nodito = Raiz->hijitos.at(i);
         nodito.asignarTipo();
         switch (nodito.tipo){
         case FIT:{
             if(banderaFit){
-                QString fit=nodito.hijos.at(0).valor.toStdString().c_str();
+                QString fit=nodito.hijitos.at(0).valor.toStdString().c_str();
                 if(fit.at(0) == "b" or fit.at(0) == "B"){
                     fit = "B";
                 }else if(fit.at(0) == "f" or fit.at(0) == "F"){
@@ -1085,8 +1085,8 @@ bool validarMontaje(Node *Raiz){
     bool banderaName = true;
     QString valorPath="";
     QString valorName="";
-    for(int i=0; i< Raiz->hijos.length(); i++){
-        Node nodito=Raiz->hijos.at(i);
+    for(int i=0; i< Raiz->hijitos.length(); i++){
+        Node nodito=Raiz->hijitos.at(i);
         nodito.asignarTipo();
         switch (nodito.tipo) {
         case PATH:{
@@ -1188,7 +1188,7 @@ bool validarMontaje(Node *Raiz){
                             partMontadas.append(*noditoM);
 
                             printf(ANSI_COLOR_RED"Particion montada con exito \n");
-                            mostList();
+                            imprimirLista();
                         }
                     }else{
                         printf(ANSI_COLOR_CYAN"ERROR: No se encuentra el disco \n");
@@ -1222,7 +1222,7 @@ bool validarMontaje(Node *Raiz){
                                 }
                                 printf(ANSI_COLOR_RED"La Particion fue montada con exito \n");
 
-                                mostList();
+                                imprimirLista();
                             }
                         }else{
                             printf(ANSI_COLOR_CYAN"ERROR: No se encuentra el disco \n");
@@ -1247,7 +1247,7 @@ void montarParticion(Node *Raiz){
 
 }
 
-void mostList(){
+void imprimirLista(){
     printf(ANSI_COLOR_MAGENTA"--------------------------------------------------------------------------------\n");
     printf("|                        Particiones montadas                                  |\n");
     printf("--------------------------------------------------------------------------------\n");

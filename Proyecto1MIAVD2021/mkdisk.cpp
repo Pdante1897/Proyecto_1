@@ -70,18 +70,18 @@ bool validarMkDisk(Node *Raiz){
     bool banderaFit=true;
     bool banderaUnit=true;
     bool banderaSize=true;
-    int numNodos = Raiz->hijos.length();
+    int numNodos = Raiz->hijitos.length();
     Disk disco;
     MBR mbr;
     int tamanioFinal;
     for(int i=0; i<numNodos;++i)
     {
-        Node nodito = Raiz->hijos.at(i);
+        Node nodito = Raiz->hijitos.at(i);
         nodito.asignarTipo();
         switch (nodito.tipo){
         case FIT:{
             if(banderaFit){
-                QString fit=nodito.hijos.at(0).valor.toStdString().c_str();
+                QString fit=nodito.hijitos.at(0).valor.toStdString().c_str();
                 if(fit.at(0) == "b" or fit.at(0) == "B"){
                     fit = "B";
                 }else if(fit.at(0) == "f" or fit.at(0) == "F"){
@@ -197,7 +197,7 @@ bool validarMkDisk(Node *Raiz){
 }
 
 void ejecutarRMD(Node *Raiz){
-    QString direccion = Raiz->hijos.at(0).valor;
+    QString direccion = Raiz->hijitos.at(0).valor;
     direccion = direccion.replace("\"","");
     FILE *archivo;
     if((archivo=fopen(direccion.toStdString().c_str(),"r"))){

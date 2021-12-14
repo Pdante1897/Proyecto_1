@@ -14,6 +14,8 @@
 #include "fdisk.h"
 #include "clases.h"
 #include "mkfs.h"
+#include "reportes.h"
+
 #define ANSI_COLOR_RED     "\x1b[31m"
 #define ANSI_COLOR_GREEN   "\x1b[32m"
 #define ANSI_COLOR_YELLOW  "\x1b[33m"
@@ -102,25 +104,25 @@ void ejecutarComando(Node Lista){
     nodo.asignarTipo();
     switch (nodo.tipo){
     case MKD:{
-        Node nodito = nodo.hijos.at(0);
+        Node nodito = nodo.hijitos.at(0);
         if(validarMkDisk(&nodito)){
             printf(ANSI_COLOR_RED"Comando reconocido correctamente. \n \n");
         }
         break;
     }
     case RMDK:{
-        Node nodito = nodo.hijos.at(0);
+        Node nodito = nodo.hijitos.at(0);
         ejecutarRMD(&nodo);
         break;
     }
     case FDK:{
-        Node nodito = nodo.hijos.at(0);
+        Node nodito = nodo.hijitos.at(0);
         if(validarFDk(&nodito)){
             printf(ANSI_COLOR_RED"Comando reconocido correctamente. \n \n");
         };
         break;
     }case MOUNT:{
-        Node nodito = nodo.hijos.at(0);
+        Node nodito = nodo.hijitos.at(0);
         validarMontaje(&nodito);
         break;
     }case PAUSE:{
@@ -129,7 +131,7 @@ void ejecutarComando(Node Lista){
         break;
 
     }case EXEC:{
-        string path = listNodos->hijos.at(0).valor.toStdString();
+        string path = listNodos->hijitos.at(0).valor.toStdString();
         FILE *archivo;
         if((archivo = fopen(path.c_str(),"r"))){
             char line[400]="";
@@ -146,7 +148,7 @@ void ejecutarComando(Node Lista){
             printf(ANSI_COLOR_CYAN"ERROR: script no encontrado\n");
         }break;
     }case UMOUNT:{
-        QString id = listNodos->hijos.at(0).valor;
+        QString id = listNodos->hijitos.at(0).valor;
         bool eliminado=false;
         for(int i=0; i<partMontadas.length();i++){
             if(partMontadas.at(i).id==id){
@@ -160,9 +162,14 @@ void ejecutarComando(Node Lista){
         if(!eliminado){printf(ANSI_COLOR_CYAN"ERROR: no se encuentra montada la unidad \n");}
         break;
     }case MKFS:{
-        Node nodito = nodo.hijos.at(0);
+        Node nodito = nodo.hijitos.at(0);
         validarMKFS(&nodito);
+        break;
+    }case REP:{
+        Node nodito = nodo.hijitos.at(0);
+        validarRep(&nodito);
     }
+
     }
 }
 

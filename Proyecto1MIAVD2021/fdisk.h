@@ -11,6 +11,6 @@ void delParticion(QString direccion, QString name, QString valorType);
 bool validarFDk(Node *Raiz);
 void montarParticion(Node *Raiz);
 int Letra(QString path);
-void mostList();
+void imprimirLista();
 bool validarMontaje(Node *Raiz);
 #endif // FDISK_H

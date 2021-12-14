@@ -32,9 +32,9 @@ void validarMKFS(Node *Raiz){
     QString id = "";
     QString type = "";
     int fileSystem = 2;//si no viene un valor por defecto usa el ext2
-    for(int i = 0; i < Raiz->hijos.count(); i++)
+    for(int i = 0; i < Raiz->hijitos.count(); i++)
     {
-        Node nodito = Raiz->hijos.at(i);
+        Node nodito = Raiz->hijitos.at(i);
         nodito.asignarTipo();
         switch (nodito.tipo) {
         case ID:
@@ -377,7 +377,6 @@ void MKFSExt3(int inicio, int tamanio, QString direccion){
     inodoT.i_perm = 755;
     fseek(archivote,superB.s_inode_start + static_cast<int>(sizeof(TablaInodos)),SEEK_SET);
     fwrite(&inodoT,sizeof(TablaInodos),1,archivote);
-
     memset(archivo.b_content,0,sizeof(archivo.b_content));
     strcpy(archivo.b_content,"1,G,root\n1,U,root,root,123\n");
     fseek(archivote,superB.s_block_start + static_cast<int>(sizeof(BloqueCarpeta)),SEEK_SET);

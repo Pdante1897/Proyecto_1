@@ -17,6 +17,7 @@ SOURCES += \
         mkfs.cpp \
         parser.cpp \
         particion.cpp \
+        reportes.cpp \
         scanner.cpp
 
 # Default rules for deployment.
@@ -35,4 +36,5 @@ HEADERS += \
     mkfs.h \
     parser.h \
     particion.h \
+    reportes.h \
     scanner.h
