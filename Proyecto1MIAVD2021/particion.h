@@ -6,13 +6,5 @@
 #include "estructuras.h"
 
 
-class Particion
-{
-public:
-    Particion();
-    bool existePart(QString, QString);
-    void crearPartPri(QString, QString, int, char, char);
-
-};
 
 #endif // PARTICION_H

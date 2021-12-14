@@ -13,8 +13,9 @@ enum choice{
     TYPE=9,
     DELETE=10,
     NAME=11,
-    FS=17,
-    ID=18
+    ID=18,
+    FS=19
+
 };
 
 void validarMKFS(Node *Raiz){
@@ -28,15 +29,16 @@ void validarMKFS(Node *Raiz){
     for(int i = 0; i < Raiz->hijos.count(); i++)
     {
         Node nodito = Raiz->hijos.at(i);
+        nodito.asignarTipo();
         switch (nodito.tipo) {
         case ID:
         {
             if(banderaID){
-                banderaID = true;
+                banderaID = false;
                 id = nodito.valor;
             }else{
                 printf("Error! Ya fue definido el parametro -ID \n");
-                bandera = true;
+                bandera = false;
                 break;
             }
 
@@ -45,11 +47,11 @@ void validarMKFS(Node *Raiz){
         case TYPE:
         {
             if(banderaType){
-                banderaType = true;
+                banderaType = false;
                 type = nodito.valor;
             }else{
                 printf("Error! Ya fue definido el parametro -TYPE \n");
-                bandera = true;
+                bandera = false;
                 break;
             }
 
@@ -61,10 +63,10 @@ void validarMKFS(Node *Raiz){
 
             }else{
                 printf("Error! Ya fue definido el parametro -FS \n");
-                bandera = true;
+                bandera = false;
                 break;
             }
-            banderaFs = true;
+            banderaFs = false;
             if(nodito.valor == "3fs"){fileSystem = 3;}
             else{fileSystem = 2;}
 
@@ -72,45 +74,103 @@ void validarMKFS(Node *Raiz){
             break;
         }
     }
-    if(!bandera){
-        if(banderaID){
-            ParticionMount *aux = getPart(id);
-            if(aux!=nullptr){
-                int index;
-                //= particion.buscarPartP_E(aux->dir,aux->name);
-                if(index != -1){
+    if(bandera){
+        if(!banderaID){
+            ParticionMount aux = getPart(id);
+            ParticionMount aux2 = *new ParticionMount("","",' ',0,"");
+
+            QString name="";
+            QString path="";
+            for(int i=0; i<partMontadas.length();i++){
+                if(partMontadas.at(i).id==id){
+                    name = partMontadas.at(i).name;
+                    path = partMontadas.at(i).dir;
+                }
+            }
+            if(aux.id!="nulo"){
+                FILE *archivo = fopen(path.toStdString().c_str(), "rb+");
+                MBR mbr;
+                fseek(archivo,0,SEEK_SET);
+                fread(&mbr,sizeof (MBR),1,archivo);
+
+                int index=-1;
+                bool part=false;
+                bool banderaExtend=false;
+                for(int i = 0; i < 4; i++){
+                    if((strcmp(mbr.mbr_partitions[i].part_name, name.toStdString().c_str()) == 0)){
+                        index = i;
+                        part=true;
+                        if(mbr.mbr_partitions[i].part_type == 'E')
+                            banderaExtend = true;
+                        break;
+                    }
+                }
+
+                if(part and !banderaExtend){
                     MBR mbr;
-                    FILE *filep = fopen(aux->dir.toStdString().c_str(),"rb+");
-                    fread(&mbr,sizeof(MBR),1,filep);
+                    archivo = fopen(aux.dir.toStdString().c_str(),"rb+");
+                    fread(&mbr,sizeof(MBR),1,archivo);
                     int inicio = mbr.mbr_partitions[index].part_start;
                     int tamanio = mbr.mbr_partitions[index].part_size;
                     QString dir;
                     if(fileSystem == 3){
-                        MKFSExt3(inicio, tamanio, aux->dir);
+                        MKFSExt3(inicio, tamanio, aux.dir);
                     }
                     else{
-                            MKFSExt2(inicio, tamanio, aux->dir);
+                            MKFSExt2(inicio, tamanio, aux.dir);
                     }
-                    fclose(filep);
-                }else{
-                    //index = particion.buscarPart_L(aux->dir,aux->name);
+                    fclose(archivo);
+                }else if(!banderaExtend){
+                    MBR mbr;
+                    EBR ebr;
+                    int inicio;
+                    int tamanio;
+                    if((archivo = fopen(path.toStdString().c_str(),"rb+"))){
+                        int ext = -1;
+                        fseek(archivo,0,SEEK_SET);
+                        fread(&mbr,sizeof(MBR),1,archivo);
+                        for(int i = 0; i < 4; i++){
+                            if(mbr.mbr_partitions[i].part_type == 'E'){
+                                ext = i;
+                                break;
+                            }
+                        }
+                        if(ext != -1){
+                            fseek(archivo, mbr.mbr_partitions[ext].part_start,SEEK_SET);
+                            while(fread(&ebr,sizeof(EBR),1,archivo)!=0 && (ftell(archivo) < mbr.mbr_partitions[ext].part_start + mbr.mbr_partitions[ext].part_size)){
+                                if(strcmp(ebr.part_name, name.toStdString().c_str()) == 0){
+                                    inicio = ebr.part_start;
+                                    tamanio = ebr.part_size;
+                                    if(fileSystem == 3){
+                                        MKFSExt3(inicio, tamanio, aux.dir);
+                                    }
+                                    else{
+                                            MKFSExt2(inicio, tamanio, aux.dir);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    fclose(archivo);
+
                 }
             }else
-                cout << "ERROR: No se ha encontrado ninguna particion montada con el id ingresado" << endl;
+                printf("ERROR: No se ha encontrado ninguna particion montada con el id ingresado \n");
         }else
-            cout << "ERROR: El parametro ID no fue definido" << endl;
+            printf("ERROR: El parametro ID no fue definido \n");
     }
 }
 
-ParticionMount* getPart(QString id){
-    ParticionMount *part;
+ParticionMount getPart(QString id){
+    ParticionMount part = *new ParticionMount("","",' ',0,"");
+    part.id="nulo";
     for(int i=0; i<partMontadas.length();i++){
         if(partMontadas.at(i).id==id){
-            *part=partMontadas.at(i);
+            part=partMontadas.at(i);
             return part;
         }
     }
-    return nullptr;
+    return part;
 }
 
 void MKFSExt2(int inicio, int tamanio, QString dir){
@@ -119,7 +179,7 @@ void MKFSExt2(int inicio, int tamanio, QString dir){
         int num_bloques = 3*num_estructuras;
         SuperBloque superB;
         FILE *archivote = fopen(dir.toStdString().c_str(),"rb+");
-
+        BloqueDeArchivos archivo;//Bloque para users.txt
         superB.s_filesystem_type = 2;
         superB.s_inodes_count = num_estructuras;
         superB.s_blocks_count = num_bloques;
@@ -206,14 +266,12 @@ void MKFSExt2(int inicio, int tamanio, QString dir){
         fseek(archivote,superB.s_inode_start + static_cast<int>(sizeof(TablaInodos)),SEEK_SET);
         fwrite(&inodoT,sizeof(TablaInodos),1,archivote);
 
-        BloqueDeArchivos archivo;//Bloque para users.txt
         memset(archivo.b_content,0,sizeof(archivo.b_content));
         strcpy(archivo.b_content,"1,G,root\n1,U,root,root,123\n");
         fseek(archivote,superB.s_block_start + static_cast<int>(sizeof(BloqueCarpeta)),SEEK_SET);
         fwrite(&archivo,sizeof(BloqueDeArchivos),1,archivote);
-        cout << "Formato Ext2" << endl;
-        cout << "..." << endl;
-        cout << "Disco formateado con exito!" << endl;
+        printf("~~~>Formato Ext2 \n");
+        printf("~~~>Disco formateado con exito! \n");
         fclose(archivote);
 }
 
@@ -318,8 +376,7 @@ void MKFSExt3(int inicio, int tamanio, QString direccion){
     strcpy(archivo.b_content,"1,G,root\n1,U,root,root,123\n");
     fseek(archivote,superB.s_block_start + static_cast<int>(sizeof(BloqueCarpeta)),SEEK_SET);
     fwrite(&archivo,sizeof(BloqueDeArchivos),1,archivote);
-    printf("~~~>Formato Ext3 \n");
-    printf("~~~>Disco formateado con exito! \n");
+
     fclose(archivote);
 }
 

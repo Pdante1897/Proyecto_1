@@ -615,11 +615,9 @@ void crearPartPri(QString direccion, QString name, int size, char fit){
             EBR ebr;
             while((fread(&ebr,sizeof(EBR),1,archivo))!=0 && (ftell(archivo) < (mbr.mbr_partitions[ext].part_size + mbr.mbr_partitions[ext].part_start))){
                 if(ebr.part_next == -1){
-                    fclose(archivo);
                     existe= false;
                 }
                 if(strcmp(ebr.part_name,name.toStdString().c_str()) == 0){
-                    fclose(archivo);
                     existe= true;
                 }
             }

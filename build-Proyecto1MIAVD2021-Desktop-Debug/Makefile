@@ -416,7 +416,9 @@ main.o: ../Proyecto1MIAVD2021/main.cpp ../Proyecto1MIAVD2021/main.h \
 		../Proyecto1MIAVD2021/parser.h \
 		../Proyecto1MIAVD2021/scanner.h \
 		../Proyecto1MIAVD2021/fdisk.h \
-		../Proyecto1MIAVD2021/clases.h
+		../Proyecto1MIAVD2021/clases.h \
+		../Proyecto1MIAVD2021/mkfs.h \
+		../Proyecto1MIAVD2021/disk.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../Proyecto1MIAVD2021/main.cpp
 
 mkdisk.o: ../Proyecto1MIAVD2021/mkdisk.cpp ../Proyecto1MIAVD2021/estructuras.h \

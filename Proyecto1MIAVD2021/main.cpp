@@ -13,6 +13,8 @@
 #include "estructuras.h"
 #include "fdisk.h"
 #include "clases.h"
+#include "mkfs.h"
+
 using namespace std;
 
 extern int yyparse();
@@ -151,7 +153,8 @@ void ejecutarComando(Node Lista){
         if(!eliminado){printf("ERROR: no se encuentra montada la unidad \n");}
         break;
     }case MKFS:{
-
+        Node nodito = nodo.hijos.at(0);
+        validarMKFS(&nodito);
     }
     }
 }

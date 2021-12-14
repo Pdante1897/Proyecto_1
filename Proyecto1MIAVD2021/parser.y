@@ -213,8 +213,8 @@ MKFS: MKFS PARAM_MKFS {
 PARAM_MKFS: id igual idmount{ $$ = new Node("ident",$3); }
             | type igual fast { $$ = new Node("type", "fast"); }
             | type igual full { $$ = new Node("type", "full"); }
-            | fs igual fs2 { $$ = new Node("FS", "2fs"); }
-            | fs igual fs3 { $$ = new Node("FS", "3fs"); };
+            | fs igual fs2 { $$ = new Node("fs", "2fs"); }
+            | fs igual fs3 { $$ = new Node("fs", "3fs"); };
 
 EXEC: exec path igual cadena {
               $$ = new Node("exec","");

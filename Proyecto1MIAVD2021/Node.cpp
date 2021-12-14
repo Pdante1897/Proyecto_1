@@ -24,6 +24,8 @@ void Node::asignarTipo(){
     if (this->nombre=="exec"){this->tipo=15;return;}
     if (this->nombre=="pause"){this->tipo=16;return;}
     if (this->nombre=="rep"){this->tipo=17;return;}
+    if (this->nombre=="ident"){this->tipo=18;return;}
+    if (this->nombre=="fs"){this->tipo=19;return;}
 
 
 

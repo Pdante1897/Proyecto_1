@@ -7,7 +7,7 @@
 class ParticionMount
 {
 public:
-    ParticionMount(QString, QString, char, int, QString);
+    ParticionMount(QString dir, QString name, char letra, int num, QString id);
     QString dir;
     QString name;
     char letra;

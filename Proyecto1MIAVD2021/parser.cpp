@@ -1761,13 +1761,13 @@ yyreduce:
 
   case 45:
 #line 216 "parser.y"
-                           { (yyval.Node) = new Node("FS", "2fs"); }
+                           { (yyval.Node) = new Node("fs", "2fs"); }
 #line 1766 "parser.cpp"
     break;
 
   case 46:
 #line 217 "parser.y"
-                           { (yyval.Node) = new Node("FS", "3fs"); }
+                           { (yyval.Node) = new Node("fs", "3fs"); }
 #line 1772 "parser.cpp"
     break;
 

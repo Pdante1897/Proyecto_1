@@ -23,7 +23,8 @@ public:
     mkfs();
 };
 
-ParticionMount* getPart(QString id);
+ParticionMount getPart(QString id);
 void MKFSExt2(int inicio, int tamanio, QString dir);
 void MKFSExt3(int inicio, int tamanio, QString dir);
+void validarMKFS(Node *Raiz);
 #endif // MKFS_H

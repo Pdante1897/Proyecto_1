@@ -17,8 +17,8 @@
 letra [a-zA-Z]
 entero ("-")?[0-9]+
 caracter ({letra}|{entero})
+idmount "vd"({letra}{entero})
 id {letra}({letra}|{entero}|"_")*
-idmount {entero}{letra}
 
 password ({letra}|{entero}|[!$@+*])+
 cadena "\""[^"\""]*"\""
@@ -81,8 +81,8 @@ INITIAL
     {entero}    {strcpy(yylval.text, yytext); return num;}
     {caracter}  {strcpy(yylval.text, yytext); return caracter;}
     {cadena}    {strcpy(yylval.text, yytext); return cadena;}
+    {idmount}    {strcpy(yylval.text, yytext); return idmount;}
     {id}        {strcpy(yylval.text, yytext); return identificador;}
-    {idmount}        {strcpy(yylval.text, yytext); return idmount;}
     {ruta}      {strcpy(yylval.text, yytext); return ruta;}
     {extension} {strcpy(yylval.text, yytext); return extension;}
     {directorio} {strcpy(yylval.text, yytext); return directorio;}
