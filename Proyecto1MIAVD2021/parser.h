@@ -72,7 +72,7 @@ extern int yydebug;
     fast = 278,
     full = 279,
     mbr = 280,
-    repDisk = 281,
+    disk = 281,
     igual = 282,
     extension = 283,
     num = 284,
@@ -111,7 +111,17 @@ extern int yydebug;
     ugo = 317,
     r = 318,
     p = 319,
-    directorio = 320
+    rutaR = 320,
+    inode = 321,
+    journaling = 322,
+    block = 323,
+    bm_inode = 324,
+    bm_block = 325,
+    tree = 326,
+    sb = 327,
+    fileRep = 328,
+    ls = 329,
+    directorio = 330
   };
 #endif
 
@@ -125,7 +135,7 @@ union YYSTYPE
         char text[399];
     
 
-#line 129 "parser.h"
+#line 139 "parser.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

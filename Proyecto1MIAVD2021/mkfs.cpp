@@ -309,29 +309,29 @@ void MKFSExt3(int inicio, int tamanio, QString direccion){
     superB.s_bm_block_start = inicio + super_size + journal_size + num_estructuras;
     superB.s_inode_start = inicio + super_size + journal_size + num_estructuras + num_bloques;
     superB.s_block_start = inicio + super_size + journal_size + num_estructuras + num_bloques + static_cast<int>(sizeof(TablaInodos))*num_estructuras;
-    char buffer1 = '0';
-    char buffer2 = '1';
-    char buffer3 = '2';
+    char bf1 = '0';
+    char bf2 = '1';
+    char bf3 = '2';
 
     fseek(archivote,inicio,SEEK_SET);//superbloque
     fwrite(&superB,sizeof(SuperBloque),1,archivote);
     for(int i = 0; i < num_estructuras; i++){//BITMAP DE INODOS
         fseek(archivote,superB.s_bm_inode_start + i,SEEK_SET);
-        fwrite(&buffer1,sizeof(char),1,archivote);
+        fwrite(&bf1,sizeof(char),1,archivote);
     }
 
     fseek(archivote,superB.s_bm_inode_start,SEEK_SET);//bit para / y users.txt en BM
-    fwrite(&buffer2,sizeof(char),1,archivote);
-    fwrite(&buffer2,sizeof(char),1,archivote);
+    fwrite(&bf2,sizeof(char),1,archivote);
+    fwrite(&bf2,sizeof(char),1,archivote);
 
     for(int i = 0; i < num_bloques; i++){//BITMAP DE BLOQUES
         fseek(archivote,superB.s_bm_block_start + i,SEEK_SET);
-        fwrite(&buffer1,sizeof(char),1,archivote);
+        fwrite(&bf1,sizeof(char),1,archivote);
     }
 
     fseek(archivote,superB.s_bm_block_start,SEEK_SET);//bit para / y users.txt en BM
-    fwrite(&buffer2,sizeof(char),1,archivote);
-    fwrite(&buffer3,sizeof(char),1,archivote);
+    fwrite(&bf2,sizeof(char),1,archivote);
+    fwrite(&bf3,sizeof(char),1,archivote);
 
     inodoT.i_uid = 1;//inodo para carpeta root
     inodoT.i_gid = 1;

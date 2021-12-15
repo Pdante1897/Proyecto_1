@@ -42,6 +42,7 @@ INITIAL
     "exec"      { return exec; }
     "rep"      { return rep; }
 
+    "-ruta"      { return rutaR; }
     "-size"     { return size; }
     "-unit"     { return unit; }
     "-path"     { return path; }
@@ -59,6 +60,16 @@ INITIAL
     "mbr"       { return mbr; }
     "disk"      { return disk; }
 
+    "inode"      { return inode; }
+    "journaling" { return journaling; }
+    "block"      { return block; }
+    "bm_inode"   { return bm_inode; }
+    "bm_block"   { return bm_block; }
+    "tree"       { return tree; }
+    "sb"         { return sb; }
+    "file"       { return fileRep; }
+    "ls"         { return ls; }
+    
     "mkfs"       { return mkfs; }
     "login"      { return login; }
     "logout"     { return logout; }

@@ -28,10 +28,10 @@
 using namespace std;
 
 void repDisco(QString , QString );
-void repmbr(QString path, QString id, QString pathDest);
-void repSB(string rutaParticion, string nombreParticion, string rutaDestino);
-void rep_bm_inode(string rutaParticion, string nombreParticion, string rutaDestino);
-void rep_bm_block(string rutaParticion, string nombreParticion, string rutaDestino);
+void repmbr(QString path, QString pathDest);
+void repSB(QString rutaParticion, QString nombreParticion, QString rutaDestino);
+void rep_bm_inode(QString path, QString particion, QString pathDest);
+void rep_bm_block(QString path, QString particion, QString pathDest);
 void rep_journal(string rutaParticion, string nombreParticion, string rutaDestino);
 void rep_inodos(string rutaParticion, string nombreParticion, string rutaDestino);
 void rep_bloques(string rutaParticion, string nombreParticion, string rutaDestino);

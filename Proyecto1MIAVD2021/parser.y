@@ -89,6 +89,19 @@
 %token <text> r
 %token <text> p
 
+
+%token <text> rutaR
+
+%token <text> inode
+%token <text> journaling
+%token <text> block
+%token <text> bm_inode
+%token <text> bm_block
+%token <text> tree
+%token <text> sb
+%token <text> fileRep
+%token <text> ls
+
 %token <text> directorio
 
 /*----------Not terminales------------*/
@@ -241,4 +254,14 @@ PARAMETRO_REP: name igual mbr { $$ = new Node("name","mbr"); }
              | name igual disk { $$ = new Node("name","disk"); }
              | path igual cadena{ $$ = new Node("path", $3); }
              | path igual ruta { $$ = new Node("path",$3); }
-             | id igual idmount { $$ = new Node("ident", $3); };
+             | id igual idmount { $$ = new Node("ident", $3); }
+             | name igual inode { $$ = new Node("name", "inode"); }
+             | name igual journaling { $$ = new Node("name", "journal"); }
+             | name igual block { $$ = new Node("name", "block"); }
+             | name igual bm_inode { $$ = new Node("name", "bm_inode"); }
+             | name igual bm_block { $$ = new Node("name", "bm_block"); }
+             | name igual sb { $$ = new Node("name", "superbloque"); }
+             | name igual fileRep { $$ = new Node("name", "file"); }
+             | name igual ls { $$ = new Node("name", "ls"); }
+             | rutaR igual ruta { $$ = new Node("ruta", $3); }
+             | rutaR igual cadena { $$ = new Node("ruta", $3); };

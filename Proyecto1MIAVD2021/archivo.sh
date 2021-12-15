@@ -66,8 +66,9 @@ pause
 mkfs -type~:~fast -id~:~vda2 -fs~:~3fs
 pause
 
-rep -id~:~vda1 -path~:~/home/bryan/Escritorio/REPORTE.png -name~:~MBR
+rep -id~:~vda1 -path~:~/home/bryan/Escritorio/REPORTEMbr.png -name~:~MBR
 rep -id~:~vda1 -path~:~/home/bryan/Escritorio/REPORTEDisk.png -name~:~disk
+rep -id~:~vda1 -path~:~/home/bryan/Escritorio/REPORTESuperBloque.png -name~:~disk
 
 
 exec -path~:~/home/bryan/Escritorio/Proyecto_1/Proyecto1MIAVD2021/archivo.sh
