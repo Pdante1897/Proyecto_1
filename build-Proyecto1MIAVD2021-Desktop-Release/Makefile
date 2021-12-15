@@ -58,8 +58,10 @@ SOURCES       = ../Proyecto1MIAVD2021/Node.cpp \
 		../Proyecto1MIAVD2021/fdisk.cpp \
 		../Proyecto1MIAVD2021/main.cpp \
 		../Proyecto1MIAVD2021/mkdisk.cpp \
+		../Proyecto1MIAVD2021/mkfs.cpp \
 		../Proyecto1MIAVD2021/parser.cpp \
 		../Proyecto1MIAVD2021/particion.cpp \
+		../Proyecto1MIAVD2021/reportes.cpp \
 		../Proyecto1MIAVD2021/scanner.cpp 
 OBJECTS       = Node.o \
 		clases.o \
@@ -67,8 +69,10 @@ OBJECTS       = Node.o \
 		fdisk.o \
 		main.o \
 		mkdisk.o \
+		mkfs.o \
 		parser.o \
 		particion.o \
+		reportes.o \
 		scanner.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
@@ -126,6 +130,7 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_config.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_post.prf \
+		../Proyecto1MIAVD2021/.qmake.stash \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exclusive_builds.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/toolchain.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf \
@@ -149,16 +154,20 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		../Proyecto1MIAVD2021/fdisk.h \
 		../Proyecto1MIAVD2021/main.h \
 		../Proyecto1MIAVD2021/mkdisk.h \
+		../Proyecto1MIAVD2021/mkfs.h \
 		../Proyecto1MIAVD2021/parser.h \
 		../Proyecto1MIAVD2021/particion.h \
+		../Proyecto1MIAVD2021/reportes.h \
 		../Proyecto1MIAVD2021/scanner.h ../Proyecto1MIAVD2021/Node.cpp \
 		../Proyecto1MIAVD2021/clases.cpp \
 		../Proyecto1MIAVD2021/disk.cpp \
 		../Proyecto1MIAVD2021/fdisk.cpp \
 		../Proyecto1MIAVD2021/main.cpp \
 		../Proyecto1MIAVD2021/mkdisk.cpp \
+		../Proyecto1MIAVD2021/mkfs.cpp \
 		../Proyecto1MIAVD2021/parser.cpp \
 		../Proyecto1MIAVD2021/particion.cpp \
+		../Proyecto1MIAVD2021/reportes.cpp \
 		../Proyecto1MIAVD2021/scanner.cpp
 QMAKE_TARGET  = Proyecto1MIAVD2021
 DESTDIR       = 
@@ -227,6 +236,7 @@ Makefile: ../Proyecto1MIAVD2021/Proyecto1MIAVD2021.pro /usr/lib/x86_64-linux-gnu
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_config.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exclusive_builds.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/toolchain.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf \
@@ -301,6 +311,7 @@ Makefile: ../Proyecto1MIAVD2021/Proyecto1MIAVD2021.pro /usr/lib/x86_64-linux-gnu
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_config.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_post.prf:
+.qmake.stash:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exclusive_builds.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/toolchain.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf:
@@ -333,8 +344,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../Proyecto1MIAVD2021/Node.h ../Proyecto1MIAVD2021/clases.h ../Proyecto1MIAVD2021/disk.h ../Proyecto1MIAVD2021/estructuras.h ../Proyecto1MIAVD2021/fdisk.h ../Proyecto1MIAVD2021/main.h ../Proyecto1MIAVD2021/mkdisk.h ../Proyecto1MIAVD2021/parser.h ../Proyecto1MIAVD2021/particion.h ../Proyecto1MIAVD2021/scanner.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../Proyecto1MIAVD2021/Node.cpp ../Proyecto1MIAVD2021/clases.cpp ../Proyecto1MIAVD2021/disk.cpp ../Proyecto1MIAVD2021/fdisk.cpp ../Proyecto1MIAVD2021/main.cpp ../Proyecto1MIAVD2021/mkdisk.cpp ../Proyecto1MIAVD2021/parser.cpp ../Proyecto1MIAVD2021/particion.cpp ../Proyecto1MIAVD2021/scanner.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../Proyecto1MIAVD2021/Node.h ../Proyecto1MIAVD2021/clases.h ../Proyecto1MIAVD2021/disk.h ../Proyecto1MIAVD2021/estructuras.h ../Proyecto1MIAVD2021/fdisk.h ../Proyecto1MIAVD2021/main.h ../Proyecto1MIAVD2021/mkdisk.h ../Proyecto1MIAVD2021/mkfs.h ../Proyecto1MIAVD2021/parser.h ../Proyecto1MIAVD2021/particion.h ../Proyecto1MIAVD2021/reportes.h ../Proyecto1MIAVD2021/scanner.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../Proyecto1MIAVD2021/Node.cpp ../Proyecto1MIAVD2021/clases.cpp ../Proyecto1MIAVD2021/disk.cpp ../Proyecto1MIAVD2021/fdisk.cpp ../Proyecto1MIAVD2021/main.cpp ../Proyecto1MIAVD2021/mkdisk.cpp ../Proyecto1MIAVD2021/mkfs.cpp ../Proyecto1MIAVD2021/parser.cpp ../Proyecto1MIAVD2021/particion.cpp ../Proyecto1MIAVD2021/reportes.cpp ../Proyecto1MIAVD2021/scanner.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -393,10 +404,10 @@ disk.o: ../Proyecto1MIAVD2021/disk.cpp ../Proyecto1MIAVD2021/disk.h
 
 fdisk.o: ../Proyecto1MIAVD2021/fdisk.cpp ../Proyecto1MIAVD2021/fdisk.h \
 		../Proyecto1MIAVD2021/Node.h \
+		../Proyecto1MIAVD2021/clases.h \
 		../Proyecto1MIAVD2021/estructuras.h \
 		../Proyecto1MIAVD2021/main.h \
-		../Proyecto1MIAVD2021/disk.h \
-		../Proyecto1MIAVD2021/clases.h
+		../Proyecto1MIAVD2021/disk.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o fdisk.o ../Proyecto1MIAVD2021/fdisk.cpp
 
 main.o: ../Proyecto1MIAVD2021/main.cpp ../Proyecto1MIAVD2021/main.h \
@@ -406,7 +417,10 @@ main.o: ../Proyecto1MIAVD2021/main.cpp ../Proyecto1MIAVD2021/main.h \
 		../Proyecto1MIAVD2021/parser.h \
 		../Proyecto1MIAVD2021/scanner.h \
 		../Proyecto1MIAVD2021/fdisk.h \
-		../Proyecto1MIAVD2021/clases.h
+		../Proyecto1MIAVD2021/clases.h \
+		../Proyecto1MIAVD2021/mkfs.h \
+		../Proyecto1MIAVD2021/disk.h \
+		../Proyecto1MIAVD2021/reportes.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../Proyecto1MIAVD2021/main.cpp
 
 mkdisk.o: ../Proyecto1MIAVD2021/mkdisk.cpp ../Proyecto1MIAVD2021/estructuras.h \
@@ -415,6 +429,14 @@ mkdisk.o: ../Proyecto1MIAVD2021/mkdisk.cpp ../Proyecto1MIAVD2021/estructuras.h \
 		../Proyecto1MIAVD2021/disk.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mkdisk.o ../Proyecto1MIAVD2021/mkdisk.cpp
 
+mkfs.o: ../Proyecto1MIAVD2021/mkfs.cpp ../Proyecto1MIAVD2021/mkfs.h \
+		../Proyecto1MIAVD2021/estructuras.h \
+		../Proyecto1MIAVD2021/Node.h \
+		../Proyecto1MIAVD2021/main.h \
+		../Proyecto1MIAVD2021/disk.h \
+		../Proyecto1MIAVD2021/clases.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mkfs.o ../Proyecto1MIAVD2021/mkfs.cpp
+
 parser.o: ../Proyecto1MIAVD2021/parser.cpp ../Proyecto1MIAVD2021/scanner.h \
 		../Proyecto1MIAVD2021/Node.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o parser.o ../Proyecto1MIAVD2021/parser.cpp
@@ -422,6 +444,16 @@ parser.o: ../Proyecto1MIAVD2021/parser.cpp ../Proyecto1MIAVD2021/scanner.h \
 particion.o: ../Proyecto1MIAVD2021/particion.cpp ../Proyecto1MIAVD2021/particion.h \
 		../Proyecto1MIAVD2021/estructuras.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o particion.o ../Proyecto1MIAVD2021/particion.cpp
+
+reportes.o: ../Proyecto1MIAVD2021/reportes.cpp ../Proyecto1MIAVD2021/reportes.h \
+		../Proyecto1MIAVD2021/estructuras.h \
+		../Proyecto1MIAVD2021/Node.h \
+		../Proyecto1MIAVD2021/main.h \
+		../Proyecto1MIAVD2021/disk.h \
+		../Proyecto1MIAVD2021/clases.h \
+		../Proyecto1MIAVD2021/mkdisk.h \
+		../Proyecto1MIAVD2021/mkfs.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o reportes.o ../Proyecto1MIAVD2021/reportes.cpp
 
 scanner.o: ../Proyecto1MIAVD2021/scanner.cpp ../Proyecto1MIAVD2021/parser.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o scanner.o ../Proyecto1MIAVD2021/scanner.cpp
