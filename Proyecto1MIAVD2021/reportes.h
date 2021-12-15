@@ -27,6 +27,17 @@
 #define ANSI_COLOR_RESET   "\x1b[0m"
 using namespace std;
 
+class Reporte
+{
+public:
+    Reporte(QString dir, QString name, char letra, int num, QString id);
+    QString dir;
+    QString name;
+    char letra;
+    int num;
+    QString id;
+};
+
 void GraficarDisco(QString , QString );
 void Graficarmbr(QString path, QString pathDest);
 void GraficarSB(QString path, QString part, QString pathDest);

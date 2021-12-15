@@ -45,7 +45,13 @@ enum choice{
 
 };
 
-
+Reporte::Reporte(QString dir, QString name, char letra, int num, QString id){
+    this->dir=dir;
+    this->id=id;
+    this->letra=letra;
+    this->num=num;
+    this->name=name;
+}
 void validarRep(Node *Raiz)
 {
     bool banderaName = true;
