@@ -27,14 +27,14 @@
 #define ANSI_COLOR_RESET   "\x1b[0m"
 using namespace std;
 
-void repDisco(QString , QString );
-void repmbr(QString path, QString pathDest);
-void repSB(QString rutaParticion, QString nombreParticion, QString rutaDestino);
-void rep_bm_inode(QString path, QString particion, QString pathDest);
-void rep_bm_block(QString path, QString particion, QString pathDest);
-void rep_journal(string rutaParticion, string nombreParticion, string rutaDestino);
-void rep_inodos(string rutaParticion, string nombreParticion, string rutaDestino);
-void rep_bloques(string rutaParticion, string nombreParticion, string rutaDestino);
+void GraficarDisco(QString , QString );
+void Graficarmbr(QString path, QString pathDest);
+void GraficarSB(QString path, QString part, QString pathDest);
+void Graficarbm_inode(QString path, QString particion, QString pathDest);
+void Graficarbm_block(QString path, QString particion, QString pathDest);
+void Graficar_journal(QString path, QString part, QString pathDest);
+void Graficar_inodos(QString path, QString part, QString pathDest);
+void Grafcar_bloques(QString path, QString part, QString pathDest);
 void validarRep(Node *Raiz);
 
 #endif // REPORTES_H

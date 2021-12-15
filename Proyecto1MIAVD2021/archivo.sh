@@ -53,6 +53,10 @@ pause
 mount -path~:~/home/archivos/fase2/Disco2.disk -name~:~Part2_D2 
 mount -path~:~/home/archivos/fase2/Disco2.disk -name~:~Part3_D2 
 pause
+
+
+unmount -id~:~vda1 
+
 #Crea el sistema de archivos en todas las particiones primarias
 #fast reescribe el superbloque 
 #full poner /0 y luego reescribir el superbloque
@@ -68,7 +72,13 @@ pause
 
 rep -id~:~vda1 -path~:~/home/bryan/Escritorio/REPORTEMbr.png -name~:~MBR
 rep -id~:~vda1 -path~:~/home/bryan/Escritorio/REPORTEDisk.png -name~:~disk
-rep -id~:~vda1 -path~:~/home/bryan/Escritorio/REPORTESuperBloque.png -name~:~disk
+rep -id~:~vda1 -path~:~/home/bryan/Escritorio/REPORTESuperBloque.png -name~:~sb
+rep -id~:~vda1 -path~:~/home/bryan/Escritorio/REPORTEJournal.png -name~:~journaling
+rep -id~:~vda1 -path~:~/home/bryan/Escritorio/REPORTESuperBloqueInodo.png -name~:~inode
+rep -id~:~vda1 -path~:~/home/bryan/Escritorio/REPORTEBloque.png -name~:~block
+rep -id~:~vda1 -path~:~/home/bryan/Escritorio/REPORTESuperBloqueInodo.txt -name~:~bm_inode
+rep -id~:~vda1 -path~:~/home/bryan/Escritorio/REPORTEBitMapBloque.txt -name~:~bm_block
+
 
 
 exec -path~:~/home/bryan/Escritorio/Proyecto_1/Proyecto1MIAVD2021/archivo.sh

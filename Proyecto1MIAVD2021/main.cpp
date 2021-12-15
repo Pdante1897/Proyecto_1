@@ -51,7 +51,12 @@ enum choice{
     REP=17
 
 };
+
+
+//Aplicacion que simula un sistema de archivos
+
 //Metodo main
+
 int main()
 {
     partMontadas=*new QList<ParticionMount>();
@@ -150,8 +155,10 @@ void ejecutarComando(Node Lista){
     }case UMOUNT:{
         QString id = listNodos->hijitos.at(0).valor;
         bool eliminado=false;
+        QString path;
         for(int i=0; i<partMontadas.length();i++){
             if(partMontadas.at(i).id==id){
+                path=partMontadas.at(i).dir;
                 partMontadas.removeAt(i);
                 printf(ANSI_COLOR_RED"La unidad fue desmontada con exito! \n");
                 eliminado = true;
@@ -159,7 +166,23 @@ void ejecutarComando(Node Lista){
             }
 
         }
+
         if(!eliminado){printf(ANSI_COLOR_CYAN"ERROR: no se encuentra montada la unidad \n");}
+        else{
+            bool ultimo=false;
+            for(int i=0; i<partMontadas.length();i++){
+                if(partMontadas.at(i).dir==path){
+                    path=partMontadas.at(i).dir;
+                    ultimo = true;
+                    break;
+                }
+
+            }
+            if(ultimo){
+            pathsMontados.removeAll(path);
+            }
+        }
+        imprimirLista();
         break;
     }case MKFS:{
         Node nodito = nodo.hijitos.at(0);

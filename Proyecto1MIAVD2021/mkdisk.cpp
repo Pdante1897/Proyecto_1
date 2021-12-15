@@ -44,24 +44,24 @@ void verificarRuta(QString direccion){
 }
 
 //para crear los archivos binarios
-bool makeDisk(QString direccion, int tam , MBR mbr){
-    string dir = direccion.toStdString();
+bool makeDisk(QString path, int tam , MBR mbr){
+    string dir = path.toStdString();
     FILE *archivo = fopen(dir.c_str(),"wb");
     if((archivo = fopen(dir.c_str(),"wb")))
         fclose(archivo);
     else
         printf(ANSI_COLOR_CYAN "Error al crear el archivo Binario" ANSI_COLOR_RESET);
-    string comand = "dd if=/dev/zero of=\""+direccion.toStdString()+"\" bs=1024 count="+to_string(tam);
+    string comand = "dd if=/dev/zero of=\""+path.toStdString()+"\" bs=1024 count="+to_string(tam);
     system(comand.c_str());
-    archivo = fopen(direccion.toStdString().c_str(), "rb+");
-    if (archivo==NULL){
-        return false;
+    if ((archivo = fopen(path.toStdString().c_str(), "rb+"))){
+        fseek(archivo,0,SEEK_SET);
+        fwrite(&mbr,sizeof(MBR),1, archivo);
+        fflush(archivo);
+        fclose(archivo);
+        return true;
     }
-    fseek(archivo,0,SEEK_SET);
-    fwrite(&mbr,sizeof(MBR),1, archivo);
-    fflush(archivo);
-    fclose(archivo);
-    return true;
+    return false;
+
 }
 //para validar si los parametros son correctos y no se repiten
 bool validarMkDisk(Node *Raiz){

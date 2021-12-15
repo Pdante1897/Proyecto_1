@@ -78,21 +78,6 @@ typedef struct{
 }BloqueDeApuntadores;
 
 
-typedef struct {
-    char id[4];
-    //std::string id;
-    int numero;
-    char nombre[16];
-    int estado;
-} particionDisk;
-
-typedef struct  {
-    char letra;
-    char ruta[100];
-    int estado;
-    particionDisk particiones[99];
-}Disko;
-
 typedef struct{
     char Journal__Tipo_Operacion[10];
     int Journal__tipo;//Archivo/Carpeta

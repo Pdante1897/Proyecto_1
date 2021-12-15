@@ -486,7 +486,7 @@ void delParticion(QString direccion, QString name, QString valorType){
         bool banderaExtend=true;
         int indicePart=0;
         int indiceExt=0;
-        bool flagExt = false;
+        bool bandExt = false;
 
         string letra = "";
 

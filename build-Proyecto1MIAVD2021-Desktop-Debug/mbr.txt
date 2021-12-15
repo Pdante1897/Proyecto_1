@@ -1,0 +1,62 @@
+digraph G {
+ node [shape=plaintext] 
+ nodo [ 
+ label =< 
+ <table border="0" cellborder="1" cellspacing="0"><tr> <td bgcolor="#30A6BB">Nombre</td> <td bgcolor="#30A6BB"> Valor </td> </tr><tr>
+<td bgcolor="#89D8E8"> mbr_tamanio </td><td bgcolor="#C7F6F0"> 78643200 </td> 
+</tr><tr>
+<td bgcolor="#89D8E8"> mbr_fecha_creacion </td><td bgcolor="#C7F6F0"> 1639448283 </td> 
+</tr><tr>
+<td bgcolor="#89D8E8"> mbr_disk_signature </td><td bgcolor="#C7F6F0"> 1639448283 </td> 
+</tr><tr>
+<td bgcolor="#89D8E8"> Estado de particion: </td><td bgcolor="#C7F6F0"> 50 </td> 
+</tr><tr>
+<td bgcolor="#89D8E8"> Tipo de particion: </td><td bgcolor="#C7F6F0"> P </td> 
+</tr><tr>
+<td bgcolor="#89D8E8"> Tipo de ajuste: </td><td bgcolor="#C7F6F0"> B </td> 
+</tr><tr>
+<td bgcolor="#89D8E8"> Inicio de particion: </td><td bgcolor="#C7F6F0"> 136 </td> 
+</tr><tr>
+<td bgcolor="#89D8E8"> Tamaño de particion: </td><td bgcolor="#C7F6F0"> 20971520 </td> 
+</tr><tr>
+<td bgcolor="#89D8E8"> Nombre de particion: </td><td bgcolor="#C7F6F0"> Part1 </td> 
+</tr><tr>
+<td bgcolor="#89D8E8"> Estado de particion: </td><td bgcolor="#C7F6F0"> 50 </td> 
+</tr><tr>
+<td bgcolor="#89D8E8"> Tipo de particion: </td><td bgcolor="#C7F6F0"> E </td> 
+</tr><tr>
+<td bgcolor="#89D8E8"> Tipo de ajuste: </td><td bgcolor="#C7F6F0"> B </td> 
+</tr><tr>
+<td bgcolor="#89D8E8"> Inicio de particion: </td><td bgcolor="#C7F6F0"> 20971656 </td> 
+</tr><tr>
+<td bgcolor="#89D8E8"> Tamaño de particion: </td><td bgcolor="#C7F6F0"> 20971520 </td> 
+</tr><tr>
+<td bgcolor="#89D8E8"> Nombre de particion: </td><td bgcolor="#C7F6F0"> Part2 </td> 
+</tr><tr>
+<td bgcolor="#89D8E8"> Estado de particion: </td><td bgcolor="#C7F6F0"> 50 </td> 
+</tr><tr>
+<td bgcolor="#89D8E8"> Tipo de particion: </td><td bgcolor="#C7F6F0"> P </td> 
+</tr><tr>
+<td bgcolor="#89D8E8"> Tipo de ajuste: </td><td bgcolor="#C7F6F0"> B </td> 
+</tr><tr>
+<td bgcolor="#89D8E8"> Inicio de particion: </td><td bgcolor="#C7F6F0"> 41943176 </td> 
+</tr><tr>
+<td bgcolor="#89D8E8"> Tamaño de particion: </td><td bgcolor="#C7F6F0"> 20971520 </td> 
+</tr><tr>
+<td bgcolor="#89D8E8"> Nombre de particion: </td><td bgcolor="#C7F6F0"> Part3 </td> 
+</tr><tr>
+<td bgcolor="#89D8E8"> Estado de particion: </td><td bgcolor="#C7F6F0"> 48 </td> 
+</tr><tr>
+<td bgcolor="#89D8E8"> Tipo de particion: </td><td bgcolor="#C7F6F0"> 0 </td> 
+</tr><tr>
+<td bgcolor="#89D8E8"> Tipo de ajuste: </td><td bgcolor="#C7F6F0"> 0 </td> 
+</tr><tr>
+<td bgcolor="#89D8E8"> Inicio de particion: </td><td bgcolor="#C7F6F0"> -1 </td> 
+</tr><tr>
+<td bgcolor="#89D8E8"> Tamaño de particion: </td><td bgcolor="#C7F6F0"> 0 </td> 
+</tr><tr>
+<td bgcolor="#89D8E8"> Nombre de particion: </td><td bgcolor="#C7F6F0">  </td> 
+</tr></table>
+>
+];
+}

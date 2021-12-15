@@ -38,7 +38,7 @@ INITIAL
     "rmdisk"    { return rmdisk; }
     "fdisk"     { return fdisk; }
     "mount"     { return mount; }
-    "umount"   { return umount; }
+    "unmount"   { return umount; }
     "exec"      { return exec; }
     "rep"      { return rep; }
 

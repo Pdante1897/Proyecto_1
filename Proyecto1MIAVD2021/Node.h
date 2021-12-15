@@ -4,6 +4,7 @@
 #include <QString>
 #include <QList>
 
+
 class Node
 {
 public:
@@ -15,6 +16,8 @@ public:
     QList<Node> hijitos;
     void agregar(Node nodo);
 };
+
+
 
 
 #endif // NODE_H

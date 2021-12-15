@@ -181,16 +181,16 @@ ParticionMount getPart(QString id){
 
 void MKFSExt2(int inicio, int tamanio, QString dir){
         double n = (tamanio - static_cast<int>(sizeof(SuperBloque)))/(4 + static_cast<int>(sizeof(TablaInodos)) +3*static_cast<int>(sizeof(BloqueDeArchivos)));
-        int num_estructuras = static_cast<int>(floor(n));//Numero de inodos
-        int num_bloques = 3*num_estructuras;
+        int numeroInodos = static_cast<int>(floor(n));
+        int numBloques = 3*numeroInodos;
         SuperBloque superB;
         FILE *archivote = fopen(dir.toStdString().c_str(),"rb+");
-        BloqueDeArchivos archivo;//Bloque para users.txt
+        BloqueDeArchivos archivo;
         superB.s_filesystem_type = 2;
-        superB.s_inodes_count = num_estructuras;
-        superB.s_blocks_count = num_bloques;
-        superB.s_free_blocks_count = num_bloques -2;
-        superB.s_free_inodes_count = num_estructuras -2;
+        superB.s_inodes_count = numeroInodos;
+        superB.s_blocks_count = numBloques;
+        superB.s_free_blocks_count = numBloques -2;
+        superB.s_free_inodes_count = numeroInodos -2;
         superB.s_mtime = time(nullptr);
         superB.s_umtime = 0;
         superB.s_mnt_count = 0;
@@ -200,41 +200,42 @@ void MKFSExt2(int inicio, int tamanio, QString dir){
         superB.s_first_ino = 2;
         superB.s_first_blo = 2;
         superB.s_bm_inode_start = inicio + static_cast<int>(sizeof(SuperBloque));
-        superB.s_bm_block_start = inicio + static_cast<int>(sizeof(SuperBloque)) + num_estructuras;
-        superB.s_inode_start = inicio + static_cast<int>(sizeof (SuperBloque)) + num_estructuras + num_bloques;
-        superB.s_block_start = inicio + static_cast<int>(sizeof(SuperBloque)) + num_estructuras + num_bloques + (static_cast<int>(sizeof(TablaInodos))*num_estructuras);
-
+        superB.s_bm_block_start = inicio + static_cast<int>(sizeof(SuperBloque)) + numeroInodos;
+        superB.s_inode_start = inicio + static_cast<int>(sizeof (SuperBloque)) + numeroInodos + numBloques;
+        superB.s_block_start = inicio + static_cast<int>(sizeof(SuperBloque)) + numeroInodos + numBloques + (static_cast<int>(sizeof(TablaInodos))*numeroInodos);
         TablaInodos inodoT;
         BloqueCarpeta bloqueC;
         char buffer = '0';
         char buffer2 = '1';
         char buffer3 = '2';
 
-        fseek(archivote,inicio,SEEK_SET);//superbloque
+        fseek(archivote,inicio,SEEK_SET);
         fwrite(&superB,sizeof(SuperBloque),1,archivote);
 
-        for(int i = 0; i < num_estructuras; i++){//bitmap de inodos
+        for(int i = 0; i < numeroInodos; i++){
             fseek(archivote,superB.s_bm_inode_start + i,SEEK_SET);
             fwrite(&buffer,sizeof(char),1,archivote);
         }
-        fseek(archivote,superB.s_bm_inode_start,SEEK_SET);//bit para / y users.txt en BM
+        fseek(archivote,superB.s_bm_inode_start,SEEK_SET);
         fwrite(&buffer2,sizeof(char),1,archivote);
         fwrite(&buffer2,sizeof(char),1,archivote);
-        for(int i = 0; i < num_bloques; i++){//bitmap de bloques
+        for(int i = 0; i < numBloques; i++){
             fseek(archivote,superB.s_bm_block_start + i,SEEK_SET);
             fwrite(&buffer,sizeof(char),1,archivote);
         }
-        fseek(archivote,superB.s_bm_block_start,SEEK_SET);//bit para / y users.txt en BM
+        fseek(archivote,superB.s_bm_block_start,SEEK_SET);
         fwrite(&buffer2,sizeof(char),1,archivote);
         fwrite(&buffer3,sizeof(char),1,archivote);
-        inodoT.i_uid = 1;//inodo para carpeta root
+        inodoT.i_uid = 1;
         inodoT.i_gid = 1;
         inodoT.i_size = 0;
         inodoT.i_atime = time(nullptr);
         inodoT.i_ctime = time(nullptr);
         inodoT.i_mtime = time(nullptr);
-        inodoT.i_block[0] = 0;
-        for(int i = 1; i < 15;i++){
+        for(int i = 0; i < 15;i++){
+            if(i==0){
+                inodoT.i_block[i] = 0;
+                continue;}
             inodoT.i_block[i] = -1;
         }
         inodoT.i_type = '0';
@@ -242,11 +243,10 @@ void MKFSExt2(int inicio, int tamanio, QString dir){
         fseek(archivote,superB.s_inode_start,SEEK_SET);
         fwrite(&inodoT,sizeof(TablaInodos),1,archivote);
 
-        //-bloque para carpeta root
-        strcpy(bloqueC.b_content[0].b_name,".");//Actual (el mismo)
+        strcpy(bloqueC.b_content[0].b_name,".");
         bloqueC.b_content[0].b_inodo=0;
 
-        strcpy(bloqueC.b_content[1].b_name,"..");//Padre
+        strcpy(bloqueC.b_content[1].b_name,"..");
         bloqueC.b_content[1].b_inodo=0;
 
         strcpy(bloqueC.b_content[2].b_name,"users.txt");
@@ -283,20 +283,22 @@ void MKFSExt2(int inicio, int tamanio, QString dir){
 
 void MKFSExt3(int inicio, int tamanio, QString direccion){
     double n = (tamanio - static_cast<int>(sizeof(SuperBloque)))/(4 + static_cast<int>(sizeof(TablaInodos)) +3*static_cast<int>(sizeof(BloqueDeArchivos)));
-    int num_estructuras = static_cast<int>(floor(n));//Bitmap de indos
-    int num_bloques = 3*num_estructuras;//Bitmap de bloques
-    int super_size = static_cast<int>(sizeof(SuperBloque));
-    int journal_size = static_cast<int>(sizeof(Journal))*num_estructuras;
+    //para bitmap
+    int numInodos = static_cast<int>(floor(n));
+    //para bitmap
+    int numBloques = 3*numInodos;
+    int superBloqueSize = static_cast<int>(sizeof(SuperBloque));
+    int sizeJournal = static_cast<int>(sizeof(Journal))*numInodos;
     SuperBloque superB;
     TablaInodos inodoT;
     BloqueCarpeta bloqueC;
-    BloqueDeArchivos archivo;    //Bloque para users.txt
+    BloqueDeArchivos archivo;
     FILE *archivote = fopen(direccion.toStdString().c_str(),"rb+");
     superB.s_filesystem_type = 3;
-    superB.s_inodes_count = num_estructuras;
-    superB.s_blocks_count = num_bloques;
-    superB.s_free_blocks_count = num_bloques - 2;
-    superB.s_free_inodes_count = num_estructuras - 2;
+    superB.s_inodes_count = numInodos;
+    superB.s_blocks_count = numBloques;
+    superB.s_free_blocks_count = numBloques - 2;
+    superB.s_free_inodes_count = numInodos - 2;
     superB.s_mtime = time(nullptr);
     superB.s_umtime = 0;
     superB.s_mnt_count = 0;
@@ -305,17 +307,17 @@ void MKFSExt3(int inicio, int tamanio, QString direccion){
     superB.s_block_size = sizeof(BloqueDeArchivos);
     superB.s_first_ino = 2;
     superB.s_first_blo = 2;
-    superB.s_bm_inode_start = inicio + super_size + journal_size;
-    superB.s_bm_block_start = inicio + super_size + journal_size + num_estructuras;
-    superB.s_inode_start = inicio + super_size + journal_size + num_estructuras + num_bloques;
-    superB.s_block_start = inicio + super_size + journal_size + num_estructuras + num_bloques + static_cast<int>(sizeof(TablaInodos))*num_estructuras;
+    superB.s_bm_inode_start = inicio + superBloqueSize + sizeJournal;
+    superB.s_bm_block_start = inicio + superBloqueSize + sizeJournal + numInodos;
+    superB.s_inode_start = inicio + superBloqueSize + sizeJournal + numInodos + numBloques;
+    superB.s_block_start = inicio + superBloqueSize + sizeJournal + numInodos + numBloques + static_cast<int>(sizeof(TablaInodos))*numInodos;
     char bf1 = '0';
     char bf2 = '1';
     char bf3 = '2';
 
     fseek(archivote,inicio,SEEK_SET);//superbloque
     fwrite(&superB,sizeof(SuperBloque),1,archivote);
-    for(int i = 0; i < num_estructuras; i++){//BITMAP DE INODOS
+    for(int i = 0; i < numInodos; i++){//BITMAP DE INODOS
         fseek(archivote,superB.s_bm_inode_start + i,SEEK_SET);
         fwrite(&bf1,sizeof(char),1,archivote);
     }
@@ -324,7 +326,7 @@ void MKFSExt3(int inicio, int tamanio, QString direccion){
     fwrite(&bf2,sizeof(char),1,archivote);
     fwrite(&bf2,sizeof(char),1,archivote);
 
-    for(int i = 0; i < num_bloques; i++){//BITMAP DE BLOQUES
+    for(int i = 0; i < numBloques; i++){//BITMAP DE BLOQUES
         fseek(archivote,superB.s_bm_block_start + i,SEEK_SET);
         fwrite(&bf1,sizeof(char),1,archivote);
     }
