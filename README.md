@@ -26,11 +26,11 @@ Al haber descargado el repositorio, debera abrir una terminal, luego debera acce
 
 La aplicacion inicia mostrando la siguiente informacion, se requiere escribir algun comando de los ya mencionados.
 
-![No se encuentra la imagen](https://github.com/Pdante1897/Proyecto_1/blob/main/Img/1.png)
+![No se encuentra la imagen](https://github.com/Pdante1897/Proyecto_1/blob/main/imagenes/1.png)
 
 De la siguiente manera se debera escribir un comando para crear un archivo binario que simulara un disco duro.
 
-![No se encuentra la imagen](https://github.com/Pdante1897/Proyecto_1/blob/main/Img/2.png)
+![No se encuentra la imagen](https://github.com/Pdante1897/Proyecto_1/blob/main/imagenes/2.png)
 
 La aplicacion exige ingresar la contrasenia del administrador del equipo.
 Una vez ingresada se creara el disco en la ubicacion especificada.
@@ -38,7 +38,7 @@ Una vez ingresada se creara el disco en la ubicacion especificada.
 
 Se utiliza el comando Fdisk para gestionar las particiones del disco deseado. Ingresando los parametros para la creacion del mismo.
 
-![No se encuentra la imagen](https://github.com/Pdante1897/Proyecto_1/blob/main/Img/3.png)
+![No se encuentra la imagen](https://github.com/Pdante1897/Proyecto_1/blob/main/imagenes/3.png)
 
 La particion ha sido creada con exito.
 
