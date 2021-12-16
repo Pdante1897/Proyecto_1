@@ -63,7 +63,7 @@ unmount -id~:~vda1
 
 mkfs -type~:~full -id~:~vda1
 pause
-mkfs -type~:~fast -id~:~vdb1 -fs~:~3fs
+mkfs -type~:~fast -id~:~vda1 -fs~:~3fs
 pause
 mkfs -type~:~full -id~:~vdc1
 pause
@@ -73,6 +73,7 @@ pause
 rep -id~:~vda1 -path~:~/home/bryan/Escritorio/REPORTEMbr.png -name~:~MBR
 rep -id~:~vda1 -path~:~/home/bryan/Escritorio/REPORTEDisk.png -name~:~disk
 rep -id~:~vda1 -path~:~/home/bryan/Escritorio/REPORTESuperBloque.png -name~:~sb
+#reporte journal no jala :,c 
 rep -id~:~vda1 -path~:~/home/bryan/Escritorio/REPORTEJournal.png -name~:~journaling
 rep -id~:~vda1 -path~:~/home/bryan/Escritorio/REPORTESuperBloqueInodo.png -name~:~inode
 rep -id~:~vda1 -path~:~/home/bryan/Escritorio/REPORTEBloque.png -name~:~block
