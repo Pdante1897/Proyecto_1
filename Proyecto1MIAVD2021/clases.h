@@ -14,4 +14,6 @@ public:
     int num;
     QString id;
 };
+
+
 #endif // CLASES_H

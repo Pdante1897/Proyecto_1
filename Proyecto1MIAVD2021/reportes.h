@@ -38,6 +38,7 @@ public:
     QString id;
 };
 
+void Graficar(int reporte,QString path, QString particion, QString pathDest);
 void GraficarDisco(QString , QString );
 void Graficarmbr(QString path, QString pathDest);
 void GraficarSB(QString path, QString part, QString pathDest);

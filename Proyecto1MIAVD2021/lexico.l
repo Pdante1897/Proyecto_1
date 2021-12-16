@@ -60,16 +60,7 @@ INITIAL
     "mbr"       { return mbr; }
     "disk"      { return disk; }
 
-    "inode"      { return inode; }
-    "journaling" { return journaling; }
-    "block"      { return block; }
-    "bm_inode"   { return bm_inode; }
-    "bm_block"   { return bm_block; }
-    "tree"       { return tree; }
-    "sb"         { return sb; }
-    "file"       { return fileRep; }
-    "ls"         { return ls; }
-    
+   
     "mkfs"       { return mkfs; }
     "login"      { return login; }
     "logout"     { return logout; }
@@ -84,9 +75,16 @@ INITIAL
     "-fs"        { return fs; }
     "2fs"        { return fs2; }
     "3fs"        { return fs3; }
-    "-r"         { return r; }
-    "-p"         { return p; }
-
+    "inode"      { return inode; }
+    "journaling" { return journaling; }
+    "block"      { return block; }
+    "bm_inode"   { return bm_inode; }
+    "bm_block"   { return bm_block; }
+    "tree"       { return tree; }
+    "sb"         { return sb; }
+    "file"       { return fileRep; }
+    "ls"         { return ls; }
+    
     "~:~"         { return igual; }
 
     {entero}    {strcpy(yylval.text, yytext); return num;}
