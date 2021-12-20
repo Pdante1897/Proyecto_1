@@ -1,8 +1,19 @@
+Developer: Bryan Gerardo Paez Morales 
+Carnet: 201700945
+
+# Practica
+Practica MIA Vacaciones Diciembre 2021 
+
+Captura de cantidad de datos en las tablas.
+![No se encuentra la imagen](https://github.com/Pdante1897/Proyecto_1/blob/main/PracticaMIAVD/capturaTablas.png)
+
+Modelo Entidad Relacion.
+![No se encuentra la imagen](https://github.com/Pdante1897/Proyecto_1/blob/main/PracticaMIAVD/modelo.png)
+
+
 # Proyecto_1
 Proyecto 1 MIA Vacaciones Diciembre 2021 
 
-Developer: Bryan Gerardo Paez Morales 
-Carnet: 201700945
 
 # Sistema De Archivos EXT2 y EXT3
 
