@@ -1,6 +1,5 @@
 
-create database Practica1;
-use Practica1;
+
 
 create table geoname(
     id int(11) NOT NULL AUTO_INCREMENT PRiMARY KEY,
@@ -51,7 +50,7 @@ create table project(
     end_actual_isodate date NOT NULL,
     donors varchar(15) NOT NULL,
     donors_iso3 varchar(5) NOT NULL,
-    recipients int(11) NOT NULL,
+    recipients int(11) NULL,
     recipients_iso3 varchar(5) NOT NULL,
     ad_sector_codes varchar(200) NOT NULL,
     ad_sector_names varchar(200) NOT NULL,

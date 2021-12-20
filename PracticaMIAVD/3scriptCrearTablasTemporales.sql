@@ -5,7 +5,7 @@ create TEMPORARY table geoname_temp(
     place_name varchar(100)NOT NULL,
     latitude decimal(16,5)NOT NULL,
     longitude decimal(16,5)NOT NULL,
-    location_type_code varchar(20)NOT NULL,
+    location_type_code varchar(200)NOT NULL,
     location_type_name varchar(250)NOT NULL,
     gazetteer_adm_code varchar(250)NOT NULL,
     gazetteer_adm_name varchar(250)NOT NULL,
